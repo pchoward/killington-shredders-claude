@@ -1,0 +1,119 @@
+---
+import { Image, getImage } from 'astro:assets';
+import { render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import DemoBadge from '../../components/DemoBadge.astro';
+import People from '../../components/People.astro';
+import Prose from '../../components/Prose.astro';
+import { getPhotos, resolvePeople } from '../../lib/content';
+import { formatDate, href, labels } from '../../lib/util';
+
+export async function getStaticPaths() {
+  const photos = await getPhotos();
+  return photos.map((photo, i) => ({
+    params: { slug: photo.id },
+    props: { photo, prev: photos[i - 1], next: photos[i + 1] },
+  }));
+}
+
+const { photo, prev, next } = Astro.props;
+const d = photo.data;
+const { Content } = await render(photo);
+const riders = await resolvePeople(d.riders, d.credits);
+const shooter = d.photographer ? await resolvePeople([], [d.photographer]) : [];
+const og = (await getImage({ src: d.image, width: 1200, format: 'png' })).src;
+---
+
+<Base title={d.title} description={d.caption ?? d.alt} image={og}>
+  <article class="wrap photo-page">
+    <nav class="crumbs mono" aria-label="Breadcrumb"><a href={href('/photos/')}>← Photo wall</a></nav>
+    <figure>
+      <div class="frame">
+        <Image src={d.image} alt={d.alt} layout="constrained" width={1600} loading="eager" />
+        {d.demo && <DemoBadge floating />}
+      </div>
+      <figcaption>
+        <h1>{d.title}</h1>
+        {d.caption && <p class="cap">{d.caption}</p>}
+        <p class="meta mono">
+          <time datetime={d.date.toISOString()}>{formatDate(d.date)}</time>
+          {d.disciplines.map((x) => ` · ${labels[x]}`)}
+        </p>
+        {shooter.length > 0 && <p class="who">📷 <People people={shooter} /></p>}
+        {riders.length > 0 && <p class="who">Riders: <People people={riders} /></p>}
+        <Prose><Content /></Prose>
+        <p class="rights mono">
+          {d.demo ? 'Demo placeholder — generated artwork, not a photo of a real person.' : '© The photographer. Shown with permission; please don’t repost without asking them.'}
+        </p>
+      </figcaption>
+    </figure>
+    <nav class="pager mono" aria-label="More photos">
+      {prev ? <a href={href(`/photos/${prev.id}/`)}>← {prev.data.title}</a> : <span></span>}
+      {next && <a href={href(`/photos/${next.id}/`)}>{next.data.title} →</a>}
+    </nav>
+  </article>
+</Base>
+
+<style>
+  .photo-page {
+    padding-top: 28px;
+  }
+  .crumbs a {
+    color: var(--muted);
+    text-decoration: none;
+  }
+  figure {
+    margin: 18px 0 0;
+    display: grid;
+    grid-template-columns: minmax(0, 1.6fr) minmax(260px, 1fr);
+    gap: clamp(24px, 4vw, 48px);
+    align-items: start;
+  }
+  @media (max-width: 860px) {
+    figure {
+      grid-template-columns: 1fr;
+    }
+  }
+  .frame {
+    position: relative;
+    border-radius: var(--radius);
+    overflow: hidden;
+    background: var(--bg-3);
+  }
+  .frame :global(img) {
+    width: 100%;
+    max-height: 85vh;
+    object-fit: contain;
+  }
+  h1 {
+    font-size: clamp(2.2rem, 5vw, 3.6rem);
+    margin-bottom: 14px;
+  }
+  .cap {
+    font-size: 1.15rem;
+  }
+  .meta {
+    color: var(--muted);
+  }
+  .who a {
+    color: var(--ice);
+  }
+  .rights {
+    color: var(--muted);
+    font-size: 0.66rem;
+    border-top: 1px solid var(--line);
+    padding-top: 14px;
+    margin-top: 20px;
+  }
+  .pager {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid var(--line);
+  }
+  .pager a {
+    text-decoration: none;
+  }
+</style>

@@ -1,0 +1,139 @@
+---
+// Filter chips for a grid of items carrying data-disciplines / data-features.
+// Works without JS (everything visible); with JS, filters live and the state
+// is kept in the URL (?d=ski&f=rail) so filtered views are shareable.
+import { labels } from '../lib/util';
+
+interface Props {
+  target: string; // CSS selector of the grid
+  disciplines: string[];
+  features?: string[];
+}
+const { target, disciplines, features = [] } = Astro.props;
+---
+
+<div class="filters" data-target={target} hidden>
+  {
+    disciplines.length > 1 && (
+      <div class="group" role="group" aria-label="Discipline">
+        <span class="mono lbl">Ride</span>
+        <button type="button" data-key="d" data-value="" aria-pressed="true">All</button>
+        {disciplines.map((d) => (
+          <button type="button" data-key="d" data-value={d} aria-pressed="false">
+            {labels[d]}
+          </button>
+        ))}
+      </div>
+    )
+  }
+  {
+    features.length > 1 && (
+      <div class="group" role="group" aria-label="Feature type">
+        <span class="mono lbl">Feature</span>
+        <button type="button" data-key="f" data-value="" aria-pressed="true">All</button>
+        {features.map((f) => (
+          <button type="button" data-key="f" data-value={f} aria-pressed="false">
+            {labels[f]}
+          </button>
+        ))}
+      </div>
+    )
+  }
+  <p class="mono count" aria-live="polite"></p>
+</div>
+
+<script>
+  document.querySelectorAll<HTMLElement>('.filters').forEach((root) => {
+    const grid = document.querySelector(root.dataset.target!);
+    if (!grid) return;
+    root.hidden = false;
+    const items = Array.from(grid.querySelectorAll<HTMLElement>('[data-disciplines]'));
+    const count = root.querySelector('.count')!;
+    const params = new URLSearchParams(location.search);
+    const state: Record<string, string> = { d: params.get('d') ?? '', f: params.get('f') ?? '' };
+
+    const apply = () => {
+      let shown = 0;
+      for (const el of items) {
+        const okD = !state.d || el.dataset.disciplines!.split(' ').includes(state.d);
+        const okF = !state.f || (el.dataset.features ?? '').split(' ').includes(state.f);
+        const show = okD && okF;
+        el.hidden = !show;
+        if (show) shown++;
+      }
+      root.querySelectorAll<HTMLButtonElement>('button').forEach((b) => {
+        b.setAttribute('aria-pressed', String(state[b.dataset.key!] === b.dataset.value));
+      });
+      count.textContent = shown === items.length ? `${shown} items` : `${shown} of ${items.length} items`;
+      const url = new URL(location.href);
+      for (const k of ['d', 'f']) state[k] ? url.searchParams.set(k, state[k]) : url.searchParams.delete(k);
+      history.replaceState(null, '', url);
+      grid.classList.toggle('no-results', shown === 0);
+    };
+
+    root.addEventListener('click', (e) => {
+      const b = (e.target as HTMLElement).closest<HTMLButtonElement>('button[data-key]');
+      if (!b) return;
+      state[b.dataset.key!] = b.dataset.value!;
+      apply();
+    });
+    apply();
+  });
+</script>
+
+<style>
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px 28px;
+    margin-bottom: 28px;
+  }
+  .filters[hidden] {
+    display: none;
+  }
+  .group {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+  }
+  .lbl {
+    color: var(--muted);
+    margin-right: 4px;
+  }
+  button {
+    font: 600 0.85rem/1 var(--font-body);
+    padding: 0.55em 1em;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background: var(--bg-2);
+    color: var(--text);
+    cursor: pointer;
+  }
+  button:hover {
+    border-color: var(--orange);
+  }
+  button[aria-pressed='true'] {
+    background: var(--orange);
+    border-color: var(--orange);
+    color: var(--orange-ink);
+  }
+  .count {
+    color: var(--muted);
+    margin: 0 0 0 auto;
+  }
+</style>
+
+<style is:global>
+  .no-results::after {
+    content: 'No clips match those filters yet.';
+    grid-column: 1 / -1;
+    display: block;
+    padding: 40px;
+    text-align: center;
+    border: 2px dashed var(--line);
+    border-radius: var(--radius);
+    color: var(--muted);
+  }
+</style>

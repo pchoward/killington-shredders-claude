@@ -1,0 +1,180 @@
+---
+import { render } from 'astro:content';
+import { getImage } from 'astro:assets';
+import Base from '../../layouts/Base.astro';
+import VideoPlayer from '../../components/VideoPlayer.astro';
+import VideoCard from '../../components/VideoCard.astro';
+import DemoBadge from '../../components/DemoBadge.astro';
+import SizeBadge from '../../components/SizeBadge.astro';
+import People from '../../components/People.astro';
+import Prose from '../../components/Prose.astro';
+import { getVideos, resolvePeople } from '../../lib/content';
+import { formatDate, href, labels } from '../../lib/util';
+
+export async function getStaticPaths() {
+  const videos = await getVideos();
+  return videos.map((video) => ({ params: { slug: video.id }, props: { video, all: videos } }));
+}
+
+const { video, all } = Astro.props;
+const d = video.data;
+const { Content } = await render(video);
+const riders = await resolvePeople(d.riders, d.credits);
+const filmer = d.filmer ? await resolvePeople([], [d.filmer]) : [];
+const related = all
+  .filter((v) => v.id !== video.id)
+  .map((v) => ({
+    v,
+    score:
+      v.data.disciplines.filter((x) => d.disciplines.includes(x)).length +
+      v.data.features.filter((x) => d.features.includes(x)).length,
+  }))
+  .sort((a, b) => b.score - a.score)
+  .slice(0, 3)
+  .map(({ v }) => v);
+const og = d.poster ? (await getImage({ src: d.poster, width: 1200, format: 'png' })).src : undefined;
+---
+
+<Base title={d.title} description={d.summary} image={og} type="video.other">
+  <article class="wrap video-page">
+    <nav class="crumbs mono" aria-label="Breadcrumb"><a href={href('/videos/')}>← All videos</a></nav>
+    <VideoPlayer url={d.videoUrl} title={d.title} poster={d.poster} posterAlt={d.posterAlt} demo={d.demo} />
+
+    <div class="layout">
+      <div>
+        <div class="tags">
+          {d.demo && <DemoBadge />}
+          {d.size && <SizeBadge size={d.size} />}
+          {d.disciplines.map((x) => <span class="chip">{labels[x]}</span>)}
+          {d.features.map((x) => <span class="chip">{labels[x]}</span>)}
+        </div>
+        <h1>{d.title}</h1>
+        {d.summary && <p class="summary">{d.summary}</p>}
+        <Prose><Content /></Prose>
+      </div>
+      <aside class="facts">
+        <dl>
+          <dt class="mono">Dropped</dt>
+          <dd><time datetime={d.date.toISOString()}>{formatDate(d.date)}</time></dd>
+          {
+            riders.length > 0 && (
+              <>
+                <dt class="mono">Riders</dt>
+                <dd><People people={riders} /></dd>
+              </>
+            )
+          }
+          {
+            filmer.length > 0 && (
+              <>
+                <dt class="mono">Filmed by</dt>
+                <dd><People people={filmer} /></dd>
+              </>
+            )
+          }
+          {
+            d.duration && (
+              <>
+                <dt class="mono">Length</dt>
+                <dd>{d.duration}</dd>
+              </>
+            )
+          }
+        </dl>
+        <p class="rights mono">
+          {d.demo ? 'Demo placeholder — not real footage.' : 'Shared with the creator’s permission. All rights remain with the creator.'}
+        </p>
+      </aside>
+    </div>
+  </article>
+
+  {
+    related.length > 0 && (
+      <section class="section wrap">
+        <h2 class="more-h">More like this</h2>
+        <div class="grid grid--3">
+          {related.map((v) => (
+            <VideoCard video={v} />
+          ))}
+        </div>
+      </section>
+    )
+  }
+</Base>
+
+<style>
+  .video-page {
+    padding-top: 28px;
+  }
+  .crumbs {
+    margin-bottom: 18px;
+  }
+  .crumbs a {
+    color: var(--muted);
+    text-decoration: none;
+  }
+  .layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 300px;
+    gap: clamp(24px, 4vw, 56px);
+    margin-top: 32px;
+  }
+  @media (max-width: 860px) {
+    .layout {
+      grid-template-columns: 1fr;
+    }
+  }
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 16px;
+  }
+  h1 {
+    font-size: clamp(2.4rem, 6vw, 4.4rem);
+  }
+  .summary {
+    font-size: 1.25rem;
+    color: var(--muted);
+    margin-top: 16px;
+    max-width: 60ch;
+  }
+  .facts {
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 22px;
+    background: var(--bg-2);
+    align-self: start;
+  }
+  dl {
+    margin: 0;
+    display: grid;
+    gap: 4px;
+  }
+  dt {
+    color: var(--muted);
+    margin-top: 10px;
+  }
+  dt:first-child {
+    margin-top: 0;
+  }
+  dd {
+    margin: 0;
+    font-weight: 600;
+  }
+  dd a {
+    color: var(--ice);
+  }
+  .rights {
+    margin: 20px 0 0;
+    padding-top: 16px;
+    border-top: 1px solid var(--line);
+    color: var(--muted);
+    font-size: 0.66rem;
+    line-height: 1.7;
+  }
+  .more-h {
+    margin-bottom: 24px;
+  }
+</style>

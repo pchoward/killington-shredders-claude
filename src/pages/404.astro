@@ -1,0 +1,42 @@
+---
+import Base from '../layouts/Base.astro';
+import { href } from '../lib/util';
+---
+
+<Base title="Bailed" noindex>
+  <section class="wrap lost">
+    <p class="mono code">Error 404</p>
+    <h1>Bailed.</h1>
+    <p>That page took a slam — it doesn't exist, or it got moved. Shake it off and drop back in.</p>
+    <div class="ctas">
+      <a href={href('/')} class="btn btn--hot">Back to the top</a>
+      <a href={href('/videos/')} class="btn">Watch the edits</a>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .lost {
+    padding-block: clamp(80px, 14vw, 180px);
+    text-align: center;
+  }
+  .code {
+    color: var(--orange);
+  }
+  h1 {
+    font-size: clamp(4rem, 18vw, 12rem);
+    margin: 12px 0 20px;
+  }
+  .lost p {
+    color: var(--muted);
+    max-width: 44ch;
+    margin-inline: auto;
+  }
+  .ctas {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 28px;
+  }
+</style>

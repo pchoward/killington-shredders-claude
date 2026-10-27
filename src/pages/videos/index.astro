@@ -1,0 +1,40 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHead from '../../components/PageHead.astro';
+import VideoCard from '../../components/VideoCard.astro';
+import Filters from '../../components/Filters.astro';
+import { getVideos } from '../../lib/content';
+
+const videos = await getVideos();
+const uniq = (xs: string[]) => [...new Set(xs)];
+const disciplines = uniq(videos.flatMap((v) => v.data.disciplines)).sort();
+const order = ['jump', 'rail', 'box', 'jib', 'pipe', 'street', 'natural', 'other'];
+const features = uniq(videos.flatMap((v) => v.data.features)).sort((a, b) => order.indexOf(a) - order.indexOf(b));
+---
+
+<Base title="Videos" description="Rider edits and session clips from the Killington-area freestyle scene.">
+  <PageHead
+    kicker="Videos"
+    title="The edits"
+    intro="Rider edits, session clips and park laps. Filter by how you ride and what you like to hit."
+  />
+  <section class="section wrap">
+    {
+      videos.length ? (
+        <>
+          <h2 class="sr-only">All videos</h2>
+          <Filters target="#video-grid" disciplines={disciplines} features={features} />
+          <div id="video-grid" class="grid grid--3">
+            {videos.map((v) => (
+              <VideoCard video={v} />
+            ))}
+          </div>
+        </>
+      ) : (
+        <p class="empty">
+          <strong>No edits yet</strong>The first clips are being cut. Check back soon.
+        </p>
+      )
+    }
+  </section>
+</Base>

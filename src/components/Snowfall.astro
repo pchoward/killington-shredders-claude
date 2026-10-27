@@ -1,0 +1,68 @@
+---
+// Lightweight canvas snowfall for the hero. Skipped for reduced-motion users
+// and paused when off-screen.
+---
+
+<canvas class="snow" aria-hidden="true"></canvas>
+
+<script>
+  const canvas = document.querySelector<HTMLCanvasElement>('canvas.snow');
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (canvas && !reduce) {
+    const ctx = canvas.getContext('2d')!;
+    let w = 0, h = 0, raf = 0, visible = true;
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    type Flake = { x: number; y: number; r: number; s: number; d: number };
+    let flakes: Flake[] = [];
+    const resize = () => {
+      w = canvas.clientWidth;
+      h = canvas.clientHeight;
+      canvas.width = w * dpr;
+      canvas.height = h * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      const n = Math.round((w * h) / 9000);
+      flakes = Array.from({ length: n }, () => ({
+        x: Math.random() * w,
+        y: Math.random() * h,
+        r: Math.random() * 2.2 + 0.5,
+        s: Math.random() * 0.8 + 0.3,
+        d: Math.random() * Math.PI * 2,
+      }));
+    };
+    const tick = () => {
+      ctx.clearRect(0, 0, w, h);
+      ctx.fillStyle = 'rgba(255,255,255,0.8)';
+      for (const f of flakes) {
+        f.y += f.s;
+        f.d += 0.01;
+        f.x += Math.sin(f.d) * 0.4;
+        if (f.y > h + 4) {
+          f.y = -4;
+          f.x = Math.random() * w;
+        }
+        ctx.beginPath();
+        ctx.arc(f.x, f.y, f.r, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      if (visible) raf = requestAnimationFrame(tick);
+    };
+    new IntersectionObserver(([e]) => {
+      visible = e.isIntersecting;
+      cancelAnimationFrame(raf);
+      if (visible) raf = requestAnimationFrame(tick);
+    }).observe(canvas);
+    window.addEventListener('resize', resize, { passive: true });
+    resize();
+  }
+</script>
+
+<style>
+  .snow {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+  }
+</style>

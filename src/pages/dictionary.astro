@@ -1,0 +1,150 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHead from '../components/PageHead.astro';
+import glossary from '../data/glossary.json';
+
+const categories = [...new Set(glossary.map((g) => g.category))];
+const sorted = [...glossary].sort((a, b) => a.term.localeCompare(b.term));
+const slug = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+---
+
+<Base title="Park Dictionary" description="Freestyle ski and snowboard terms explained — features, tricks, culture and park safety.">
+  <PageHead
+    kicker="Park Dictionary"
+    title="Speak park"
+    intro="New to the park, or nodding along when someone says 'switch back nine'? Here's the lingo — features, tricks, culture and how to stay safe."
+  />
+  <section class="section wrap">
+    <div class="tools">
+      <label class="search">
+        <span class="sr-only">Search terms</span>
+        <input type="search" placeholder="Search: butter, cork, knuckle…" autocomplete="off" />
+      </label>
+      <div class="cats" role="group" aria-label="Category">
+        <button type="button" data-cat="" aria-pressed="true">All</button>
+        {categories.map((c) => <button type="button" data-cat={c} aria-pressed="false">{c}</button>)}
+      </div>
+    </div>
+    <dl class="terms">
+      {
+        sorted.map((g) => (
+          <div class="term" id={slug(g.term)} data-cat={g.category} data-text={`${g.term} ${g.definition}`.toLowerCase()}>
+            <dt>
+              <span class="mono cat">{g.category}</span>
+              <span class="name">{g.term}</span>
+            </dt>
+            <dd>{g.definition}</dd>
+          </div>
+        ))
+      }
+    </dl>
+    <p class="none empty" hidden><strong>No match</strong>Know a term we're missing? Tell us on Instagram.</p>
+  </section>
+</Base>
+
+<script>
+  const input = document.querySelector<HTMLInputElement>('.search input')!;
+  const terms = Array.from(document.querySelectorAll<HTMLElement>('.term'));
+  const none = document.querySelector<HTMLElement>('.none')!;
+  const buttons = Array.from(document.querySelectorAll<HTMLButtonElement>('.cats button'));
+  let cat = '';
+  const apply = () => {
+    const q = input.value.trim().toLowerCase();
+    let shown = 0;
+    for (const t of terms) {
+      const ok = (!cat || t.dataset.cat === cat) && (!q || t.dataset.text!.includes(q));
+      t.hidden = !ok;
+      if (ok) shown++;
+    }
+    none.hidden = shown > 0;
+    buttons.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.cat === cat)));
+  };
+  input.addEventListener('input', apply);
+  buttons.forEach((b) =>
+    b.addEventListener('click', () => {
+      cat = b.dataset.cat!;
+      apply();
+    }),
+  );
+</script>
+
+<style>
+  .tools {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    align-items: center;
+    margin-bottom: 32px;
+  }
+  .search {
+    flex: 1 1 320px;
+  }
+  input {
+    width: 100%;
+    font: 500 1.05rem var(--font-body);
+    padding: 14px 18px;
+    border-radius: 999px;
+    border: 2px solid var(--line);
+    background: var(--bg-2);
+    color: var(--text);
+  }
+  input:focus {
+    border-color: var(--orange);
+    outline: none;
+  }
+  .cats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .cats button {
+    font: 600 0.85rem/1 var(--font-body);
+    padding: 0.6em 1em;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background: var(--bg-2);
+    color: var(--text);
+    cursor: pointer;
+  }
+  .cats button[aria-pressed='true'] {
+    background: var(--orange);
+    border-color: var(--orange);
+    color: var(--orange-ink);
+  }
+  .terms {
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr));
+    gap: 16px;
+  }
+  .term {
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 20px 22px;
+  }
+  .term:target {
+    border-color: var(--orange);
+  }
+  dt {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 10px;
+  }
+  .cat {
+    color: var(--ice);
+    font-size: 0.66rem;
+  }
+  .name {
+    font-family: var(--font-display);
+    text-transform: uppercase;
+    font-size: 1.7rem;
+    line-height: 1;
+  }
+  dd {
+    margin: 0;
+    color: #cdd6e0;
+    font-size: 0.98rem;
+  }
+</style>

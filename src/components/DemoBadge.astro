@@ -1,0 +1,32 @@
+---
+// Hazard-tape badge on every demo item. Deliberately loud.
+interface Props {
+  floating?: boolean;
+}
+const { floating = false } = Astro.props;
+---
+
+<span class:list={['demo-badge', { floating }]} title="Placeholder content — not a real contribution">
+  Demo
+</span>
+
+<style>
+  .demo-badge {
+    display: inline-block;
+    padding: 4px 9px;
+    border-radius: 4px;
+    font: 700 0.68rem/1 var(--font-mono);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #fff;
+    background: repeating-linear-gradient(135deg, #1a0a03 0 6px, #3a1708 6px 12px);
+    border: 1.5px solid var(--orange);
+    white-space: nowrap;
+  }
+  .floating {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    z-index: 2;
+  }
+</style>

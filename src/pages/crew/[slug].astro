@@ -1,0 +1,142 @@
+---
+import { Image } from 'astro:assets';
+import { render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import DemoBadge from '../../components/DemoBadge.astro';
+import VideoCard from '../../components/VideoCard.astro';
+import PhotoTile from '../../components/PhotoTile.astro';
+import Lightbox from '../../components/Lightbox.astro';
+import Prose from '../../components/Prose.astro';
+import { getCrew, getVideos, getPhotos } from '../../lib/content';
+import { href, instagramUrl, labels } from '../../lib/util';
+
+export async function getStaticPaths() {
+  const crew = await getCrew();
+  return crew.map((rider) => ({ params: { slug: rider.id }, props: { rider } }));
+}
+
+const { rider } = Astro.props;
+const d = rider.data;
+const { Content } = await render(rider);
+const features = (refs: { id: string }[]) => refs.some((r) => r.id === rider.id);
+const videos = (await getVideos()).filter((v) => features(v.data.riders));
+const photos = (await getPhotos()).filter((p) => features(p.data.riders));
+const insta = instagramUrl(d.handle);
+---
+
+<Base title={d.name} description={`${d.name} — rider profile on Killington Shredders.`}>
+  <article class="wrap rider">
+    <nav class="crumbs mono" aria-label="Breadcrumb"><a href={href('/crew/')}>← The crew</a></nav>
+    <div class="top">
+      <div class="pic">
+        {d.portrait ? <Image src={d.portrait} alt={d.portraitAlt ?? ''} width={800} loading="eager" /> : <span class="initial">{d.name[0]}</span>}
+        {d.demo && <DemoBadge floating />}
+      </div>
+      <div>
+        <h1>{d.name}</h1>
+        {insta && <p><a href={insta} target="_blank" rel="noopener" class="mono handle">@{d.handle} ↗</a></p>}
+        <dl class="stats">
+          <div><dt class="mono">Rides</dt><dd>{d.disciplines.map((x) => labels[x]).join(' / ') || '—'}</dd></div>
+          {d.stance && d.stance !== 'n/a' && <div><dt class="mono">Stance</dt><dd>{d.stance}</dd></div>}
+          {d.favoriteFeature && <div><dt class="mono">Go-to feature</dt><dd>{d.favoriteFeature}</dd></div>}
+          {d.hometown && <div><dt class="mono">Home</dt><dd>{d.hometown}</dd></div>}
+        </dl>
+        <Prose><Content /></Prose>
+      </div>
+    </div>
+  </article>
+
+  {
+    videos.length > 0 && (
+      <section class="section wrap">
+        <h2 class="h">Edits featuring {d.name}</h2>
+        <div class="grid grid--3">
+          {videos.map((v) => (
+            <VideoCard video={v} />
+          ))}
+        </div>
+      </section>
+    )
+  }
+  {
+    photos.length > 0 && (
+      <section class="section wrap">
+        <h2 class="h">Photos</h2>
+        <div class="grid grid--4">
+          {photos.map((p, i) => (
+            <PhotoTile photo={p} index={i} />
+          ))}
+        </div>
+        <Lightbox />
+      </section>
+    )
+  }
+</Base>
+
+<style>
+  .rider {
+    padding-top: 28px;
+  }
+  .crumbs a {
+    color: var(--muted);
+    text-decoration: none;
+  }
+  .top {
+    display: grid;
+    grid-template-columns: minmax(0, 420px) 1fr;
+    gap: clamp(24px, 4vw, 56px);
+    margin-top: 20px;
+    align-items: start;
+  }
+  @media (max-width: 760px) {
+    .top {
+      grid-template-columns: 1fr;
+    }
+  }
+  .pic {
+    position: relative;
+    aspect-ratio: 1;
+    border-radius: var(--radius);
+    overflow: hidden;
+    background: var(--bg-3);
+  }
+  .pic :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .initial {
+    display: grid;
+    place-items: center;
+    height: 100%;
+    font-family: var(--font-display);
+    font-size: 8rem;
+    color: var(--orange);
+  }
+  h1 {
+    font-size: clamp(2.8rem, 8vw, 5.5rem);
+  }
+  .handle {
+    color: var(--orange);
+    text-decoration: none;
+  }
+  .stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px 32px;
+    margin: 24px 0;
+    padding: 18px 0;
+    border-block: 1px solid var(--line);
+  }
+  dt {
+    color: var(--muted);
+  }
+  dd {
+    margin: 4px 0 0;
+    font-weight: 700;
+    text-transform: capitalize;
+  }
+  .h {
+    margin-bottom: 24px;
+  }
+</style>

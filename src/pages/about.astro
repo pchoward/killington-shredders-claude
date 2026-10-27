@@ -1,0 +1,122 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHead from '../components/PageHead.astro';
+import site from '../data/site.json';
+import { href, instagramUrl } from '../lib/util';
+
+const insta = instagramUrl(site.social.instagram);
+const email = site.contactEmail;
+---
+
+<Base title="About & policies" description="What Killington Shredders is, how we credit creators, and how to request changes or takedowns.">
+  <PageHead kicker="About" title="About & policies" intro="Who we are, how we treat riders' and creators' work, and how to reach us." />
+
+  <div class="section wrap layout">
+    <nav class="toc mono" aria-label="On this page">
+      <a href="#what">What this is</a>
+      <a href="#independent">Independence</a>
+      <a href="#credit">Credit & permission</a>
+      <a href="#demo-content">Demo content</a>
+      <a href="#takedown">Takedowns</a>
+      <a href="#privacy">Privacy</a>
+      <a href="#contact">Contact</a>
+    </nav>
+
+    <div class="prose">
+      <h2 id="what">What this is</h2>
+      <p>
+        Killington Shredders is an independent media and community project for freestyle skiing, snowboarding and
+        terrain-park culture in and around Killington, Vermont. We collect rider edits, photos and stories in one
+        place, so the best clips from the local scene don't disappear into a feed.
+      </p>
+
+      <h2 id="independent">Independence</h2>
+      <p>
+        <strong>We are not affiliated with, endorsed by or sponsored by Killington Resort</strong> or any ski area
+        operator. "Killington" refers to the town and region where we ride. We don't speak for any mountain, and
+        nothing here is official resort information — for conditions, park status, tickets and rules, check the
+        resort's own channels.
+      </p>
+
+      <h2 id="credit">Credit & permission</h2>
+      <ul>
+        <li>We only publish media we created ourselves or have explicit permission to use.</li>
+        <li>Every video and photo is credited to its creator and riders, linked to their profile where possible.</li>
+        <li>Creators keep all rights to their work. Featuring it here doesn't transfer ownership.</li>
+        <li>We record how permission was given for every piece (our publishing system won't build without it).</li>
+        <li>We need a parent or guardian's OK before featuring anyone under 18.</li>
+        <li>We won't post riding on closed terrain or anything that encourages breaking mountain rules.</li>
+      </ul>
+
+      <h2 id="demo-content">Demo content</h2>
+      <p>
+        While the site is getting started, some entries are <strong>demo placeholders</strong>: illustrated artwork,
+        sample rider profiles ("Demo Rider A" and so on), sample videos with no footage, and example events. They
+        exist only to show how the site works. Every demo item carries a striped <em>Demo</em> badge, and the artwork
+        itself is stamped "Demo · Placeholder". None of it depicts real people, real footage or real events, and it
+        will be removed as real contributions arrive.
+      </p>
+
+      <h2 id="takedown">Takedowns & corrections</h2>
+      <p>
+        If you appear in something on this site, or you created it, and you want it changed, re-credited or removed,
+        just ask — no explanation needed. We aim to act within 48 hours. Tell us the page link and what you'd like
+        changed{email ? '' : ' via an Instagram DM'}.
+      </p>
+
+      <h2 id="privacy">Privacy</h2>
+      <p>
+        This site doesn't use advertising, tracking cookies or analytics scripts. Videos from YouTube, Vimeo,
+        Instagram or TikTok only load when you press play; at that point the platform's own privacy policy applies.
+        If you send us a submission, we use your details only to contact you about it.
+      </p>
+
+      <h2 id="contact">Contact</h2>
+      <p>
+        {email && <>Email <a href={`mailto:${email}`}>{email}</a>{insta ? ' or ' : '.'}</>}
+        {insta && <>message us on <a href={insta} target="_blank" rel="noopener">Instagram</a>.</>}
+        {!email && !insta && <>Contact details are coming soon.</>}
+      </p>
+      <p><a href={href('/share/')}>Want to share a clip? Here's how →</a></p>
+    </div>
+  </div>
+</Base>
+
+<style>
+  .layout {
+    display: grid;
+    grid-template-columns: 220px minmax(0, 1fr);
+    gap: clamp(24px, 5vw, 72px);
+    align-items: start;
+  }
+  @media (max-width: 800px) {
+    .layout {
+      grid-template-columns: 1fr;
+    }
+    .toc {
+      position: static !important;
+      flex-direction: row !important;
+      flex-wrap: wrap;
+    }
+  }
+  .toc {
+    position: sticky;
+    top: calc(var(--header-h) + 24px);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .toc a {
+    color: var(--muted);
+    text-decoration: none;
+  }
+  .toc a:hover {
+    color: var(--orange);
+  }
+  .prose h2:first-child {
+    margin-top: 0;
+  }
+  .prose h2 {
+    scroll-margin-top: calc(var(--header-h) + 24px);
+  }
+</style>

@@ -1,0 +1,58 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHead from '../../components/PageHead.astro';
+import PhotoTile from '../../components/PhotoTile.astro';
+import Lightbox from '../../components/Lightbox.astro';
+import Filters from '../../components/Filters.astro';
+import { getPhotos } from '../../lib/content';
+
+const photos = await getPhotos();
+const disciplines = [...new Set(photos.flatMap((p) => p.data.disciplines))].sort();
+---
+
+<Base title="Photos" description="The photo wall: stills from the Killington-area freestyle scene, credited to the people who shot them.">
+  <PageHead kicker="Photos" title="Photo wall" intro="Stills from the park and beyond. Every shot is credited to the photographer who made it." />
+  <section class="section wrap">
+    {
+      photos.length ? (
+        <>
+          <Filters target="#photo-wall" disciplines={disciplines} />
+          <div id="photo-wall" class="masonry">
+            {photos.map((p, i) => (
+              <PhotoTile photo={p} index={i} />
+            ))}
+          </div>
+          <Lightbox />
+        </>
+      ) : (
+        <p class="empty">
+          <strong>No photos yet</strong>The wall is waiting for its first shot.
+        </p>
+      )
+    }
+  </section>
+</Base>
+
+<style>
+  .masonry {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 240px), 1fr));
+    grid-auto-rows: 8px;
+    grid-auto-flow: dense;
+    column-gap: 16px;
+  }
+  .masonry :global(.tile) {
+    grid-row-end: span var(--span);
+    margin-bottom: 16px;
+  }
+  .masonry :global(.tile a),
+  .masonry :global(.tile img) {
+    height: 100%;
+  }
+  .masonry :global(.tile img) {
+    object-fit: cover;
+  }
+  .masonry :global(.tile[hidden]) {
+    display: none;
+  }
+</style>

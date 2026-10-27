@@ -1,0 +1,95 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { Image, getImage } from 'astro:assets';
+import DemoBadge from './DemoBadge.astro';
+import { href } from '../lib/util';
+
+interface Props {
+  photo: CollectionEntry<'photos'>;
+  index?: number;
+}
+const { photo, index = 0 } = Astro.props;
+const d = photo.data;
+const full = await getImage({ src: d.image, width: 1800 });
+// Row span for the photo wall grid (8px rows, ~280px columns, 16px gap).
+const span = Math.round((280 * (d.image.height / d.image.width) + 16) / 8);
+---
+
+<figure class="tile" data-disciplines={d.disciplines.join(' ')} style={`--span:${span}`}>
+  <a
+    href={href(`/photos/${photo.id}/`)}
+    class="open"
+    data-lightbox
+    data-full={full.src}
+    data-alt={d.alt}
+    data-index={index}
+    data-title={d.title}
+    data-caption={d.caption ?? ''}
+    data-credit={d.photographer ? `📷 ${d.photographer.name}` : ''}
+    data-demo={d.demo ? 'true' : undefined}
+  >
+    <Image src={d.image} alt={d.alt} width={800} sizes="(max-width: 600px) 50vw, (max-width: 1100px) 33vw, 25vw" />
+    {d.demo && <DemoBadge floating />}
+    <figcaption>
+      <span class="t">{d.title}</span>
+      {d.photographer && <span class="mono c">📷 {d.photographer.name}</span>}
+    </figcaption>
+  </a>
+</figure>
+
+<style>
+  .tile {
+    margin: 0 0 clamp(10px, 1.6vw, 18px);
+    break-inside: avoid;
+    position: relative;
+    border-radius: var(--radius);
+    overflow: hidden;
+    background: var(--bg-3);
+  }
+  .open {
+    display: block;
+    position: relative;
+    color: #fff;
+    text-decoration: none;
+  }
+  .open :global(img) {
+    width: 100%;
+    height: auto;
+    transition: transform 0.4s ease;
+  }
+  .open:hover :global(img) {
+    transform: scale(1.04);
+  }
+  figcaption {
+    position: absolute;
+    inset: auto 0 0 0;
+    padding: 40px 14px 12px;
+    background: linear-gradient(transparent, rgba(5, 7, 10, 0.88));
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    opacity: 0;
+    transform: translateY(6px);
+    transition:
+      opacity 0.2s ease,
+      transform 0.2s ease;
+  }
+  .open:hover figcaption,
+  .open:focus-visible figcaption {
+    opacity: 1;
+    transform: none;
+  }
+  @media (hover: none) {
+    figcaption {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  .t {
+    font-weight: 700;
+  }
+  .c {
+    font-size: 0.66rem;
+    color: #cfd8e3;
+  }
+</style>

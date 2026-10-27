@@ -1,0 +1,210 @@
+# Pages CMS (https://pagescms.org) — a free, hosted editor for this repo.
+# Sign in with GitHub at app.pagescms.org, pick this repository, and you get
+# forms for every content type below. Saving commits to GitHub, which
+# triggers a rebuild. No server or database to run.
+
+media:
+  input: src/assets/media
+  output: ../../assets/media
+
+content:
+  - name: videos
+    label: Videos
+    type: collection
+    path: src/content/videos
+    filename: "{year}-{month}-{day}-{primary}.md"
+    view:
+      fields: [title, date, demo]
+      primary: title
+      sort: [date]
+    fields:
+      - { name: title, label: Title, type: string, required: true }
+      - { name: date, label: Date, type: date, required: true }
+      - { name: videoUrl, label: Video link, type: string, description: "Paste a YouTube, Vimeo, Instagram or TikTok link" }
+      - { name: summary, label: One-line summary, type: string }
+      - { name: poster, label: Poster image (optional for YouTube), type: image }
+      - { name: posterAlt, label: Poster description (alt text), type: string }
+      - name: disciplines
+        label: Discipline
+        type: select
+        options: { multiple: true, values: [ski, snowboard] }
+      - name: features
+        label: Feature types
+        type: select
+        options: { multiple: true, values: [jump, rail, box, jib, pipe, street, natural, other] }
+      - name: size
+        label: Feature size
+        type: select
+        options: { values: [S, M, L, XL] }
+      - name: riders
+        label: Crew riders (profile file names, e.g. jane-doe)
+        type: string
+        list: true
+      - name: credits
+        label: Other riders / credits
+        type: object
+        list: true
+        fields:
+          - { name: name, label: Name, type: string, required: true }
+          - { name: handle, label: Instagram handle (no @), type: string }
+      - name: filmer
+        label: Filmed by
+        type: object
+        fields:
+          - { name: name, label: Name, type: string }
+          - { name: handle, label: Instagram handle (no @), type: string }
+      - { name: duration, label: Length (e.g. 2:14), type: string }
+      - { name: featured, label: Feature on home page, type: boolean }
+      - name: rights
+        label: How do we have permission? (required)
+        type: select
+        required: true
+        options: { values: [own-work, creator-permission, creator-submitted, licensed] }
+      - { name: rightsNote, label: Permission note (where/when they said yes), type: string }
+      - { name: draft, label: Draft (hide from site), type: boolean }
+      - { name: body, label: Write-up, type: rich-text }
+
+  - name: photos
+    label: Photos
+    type: collection
+    path: src/content/photos
+    filename: "{year}-{month}-{day}-{primary}.md"
+    view:
+      fields: [title, date, demo]
+      primary: title
+    fields:
+      - { name: title, label: Title, type: string, required: true }
+      - { name: date, label: Date, type: date, required: true }
+      - { name: image, label: Photo, type: image, required: true }
+      - { name: alt, label: Describe the photo (alt text), type: string, required: true }
+      - { name: caption, label: Caption, type: string }
+      - name: photographer
+        label: Photographer
+        type: object
+        fields:
+          - { name: name, label: Name, type: string }
+          - { name: handle, label: Instagram handle (no @), type: string }
+      - { name: riders, label: Crew riders (profile file names), type: string, list: true }
+      - name: credits
+        label: Other riders
+        type: object
+        list: true
+        fields:
+          - { name: name, label: Name, type: string, required: true }
+          - { name: handle, label: Instagram handle (no @), type: string }
+      - name: disciplines
+        label: Discipline
+        type: select
+        options: { multiple: true, values: [ski, snowboard] }
+      - { name: featured, label: Use as home-page hero, type: boolean }
+      - name: rights
+        label: How do we have permission? (required)
+        type: select
+        required: true
+        options: { values: [own-work, creator-permission, creator-submitted, licensed] }
+      - { name: rightsNote, label: Permission note, type: string }
+      - { name: draft, label: Draft (hide from site), type: boolean }
+
+  - name: stories
+    label: Stories
+    type: collection
+    path: src/content/stories
+    filename: "{primary}.md"
+    view:
+      fields: [title, date, demo]
+      primary: title
+    fields:
+      - { name: title, label: Title, type: string, required: true }
+      - { name: date, label: Date, type: date, required: true }
+      - { name: excerpt, label: Short teaser (max 280 characters), type: text, required: true }
+      - { name: cover, label: Cover image, type: image }
+      - { name: coverAlt, label: Cover description (alt text), type: string }
+      - { name: author, label: Author, type: string }
+      - name: kind
+        label: Type
+        type: select
+        options: { values: [feature, interview, how-to, session-report, news] }
+      - { name: tags, label: Tags, type: string, list: true }
+      - { name: featured, label: Feature on home page, type: boolean }
+      - name: rights
+        label: Permission for images/quotes
+        type: select
+        required: true
+        options: { values: [own-work, creator-permission, creator-submitted, licensed] }
+      - { name: draft, label: Draft (hide from site), type: boolean }
+      - { name: body, label: Story, type: rich-text }
+
+  - name: crew
+    label: Crew profiles
+    type: collection
+    path: src/content/crew
+    filename: "{primary}.md"
+    view:
+      fields: [name, demo]
+      primary: name
+    fields:
+      - { name: name, label: Name, type: string, required: true }
+      - { name: handle, label: Instagram handle (no @), type: string }
+      - name: disciplines
+        label: Rides
+        type: select
+        options: { multiple: true, values: [ski, snowboard] }
+      - name: stance
+        label: Stance
+        type: select
+        options: { values: [regular, goofy, n/a] }
+      - { name: favoriteFeature, label: Go-to feature, type: string }
+      - { name: hometown, label: Home, type: string }
+      - { name: portrait, label: Portrait, type: image }
+      - { name: portraitAlt, label: Portrait description, type: string }
+      - { name: profileConsent, label: The rider has agreed to this profile, type: boolean, required: true }
+      - { name: order, label: Sort order (lower = first), type: number }
+      - { name: body, label: Bio, type: rich-text }
+
+  - name: events
+    label: Sessions & events
+    type: collection
+    path: src/content/events
+    filename: "{year}-{month}-{day}-{primary}.md"
+    view:
+      fields: [title, start, demo]
+      primary: title
+    fields:
+      - { name: title, label: Title, type: string, required: true }
+      - { name: start, label: Starts, type: date, options: { time: true }, required: true }
+      - { name: end, label: Ends, type: date, options: { time: true } }
+      - { name: allDay, label: All day, type: boolean }
+      - name: kind
+        label: Type
+        type: select
+        options: { values: [session, meetup, film-night, contest, clean-up, other] }
+      - { name: location, label: Location, type: string, required: true }
+      - { name: link, label: Details link, type: string }
+      - { name: organiser, label: Organiser, type: string }
+      - { name: draft, label: Draft (hide from site), type: boolean }
+      - { name: body, label: Description, type: rich-text }
+
+  - name: settings
+    label: Site settings
+    type: file
+    path: src/data/site.json
+    format: json
+    fields:
+      - { name: name, label: Site name, type: string }
+      - { name: tagline, label: Tagline, type: string }
+      - { name: description, label: Description (search engines), type: text }
+      - { name: showDemoContent, label: Show demo/placeholder content, type: boolean }
+      - { name: contactEmail, label: Contact email, type: string }
+      - name: social
+        label: Social links
+        type: object
+        fields:
+          - { name: instagram, label: Instagram handle (no @), type: string }
+          - { name: youtube, label: YouTube channel URL, type: string }
+          - { name: tiktok, label: TikTok profile URL, type: string }
+      - name: submissions
+        label: Submissions
+        type: object
+        fields:
+          - { name: open, label: Submissions open, type: boolean }
+          - { name: formEndpoint, label: Form endpoint (e.g. Formspree URL), type: string }

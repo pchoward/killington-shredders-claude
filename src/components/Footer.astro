@@ -1,0 +1,122 @@
+---
+import Logo from './Logo.astro';
+import site from '../data/site.json';
+import { href, instagramUrl } from '../lib/util';
+
+const socials = [
+  { label: 'Instagram', url: instagramUrl(site.social.instagram) },
+  { label: 'YouTube', url: site.social.youtube || undefined },
+  { label: 'TikTok', url: site.social.tiktok || undefined },
+].filter((s) => s.url);
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="top">
+      <div class="brand">
+        <Logo size={44} />
+        <p class="muted">{site.tagline}</p>
+        {
+          socials.length > 0 && (
+            <ul class="socials">
+              {socials.map((s) => (
+                <li>
+                  <a href={s.url} rel="me noopener" target="_blank">
+                    {s.label} ↗
+                  </a>
+                </li>
+              ))}
+            </ul>
+          )
+        }
+      </div>
+      <nav aria-label="Footer">
+        <ul class="links">
+          <li><a href={href('/videos/')}>Videos</a></li>
+          <li><a href={href('/photos/')}>Photos</a></li>
+          <li><a href={href('/stories/')}>Stories</a></li>
+          <li><a href={href('/crew/')}>Crew</a></li>
+          <li><a href={href('/sessions/')}>Sessions</a></li>
+          <li><a href={href('/dictionary/')}>Park Dictionary</a></li>
+          <li><a href={href('/share/')}>Share a clip</a></li>
+          <li><a href={href('/about/')}>About &amp; policies</a></li>
+          <li><a href={href('/rss.xml')}>RSS feed</a></li>
+        </ul>
+      </nav>
+    </div>
+
+    <p class="disclaimer">
+      <strong>Independent project.</strong> Killington Shredders is a fan-run media and community brand. It is not
+      affiliated with, endorsed by, or sponsored by Killington Resort or any ski area operator. Trail and resort
+      names are used only to describe where riding happens. Ride within your ability, follow posted signage and
+      the Responsibility Code.
+    </p>
+    <p class="fine mono">
+      © {year} Killington Shredders · Media belongs to the credited creators and is shown with their permission ·
+      <a href={href('/about/#takedown')}>Takedown requests</a>
+    </p>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    margin-top: clamp(48px, 8vw, 96px);
+    border-top: 1px solid var(--line);
+    background: var(--bg-2);
+    padding-block: 48px 32px;
+  }
+  .top {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 32px;
+  }
+  .brand p {
+    margin-top: 14px;
+    max-width: 34ch;
+  }
+  .socials,
+  .links {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .socials {
+    display: flex;
+    gap: 16px;
+    font-weight: 600;
+  }
+  .links {
+    columns: 2;
+    column-gap: 48px;
+  }
+  .links li {
+    margin-bottom: 8px;
+  }
+  .links a,
+  .socials a {
+    text-decoration: none;
+    color: var(--muted);
+  }
+  .links a:hover,
+  .socials a:hover {
+    color: var(--orange);
+  }
+  .disclaimer {
+    margin-top: 40px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line);
+    font-size: 0.9rem;
+    color: var(--muted);
+    max-width: 90ch;
+  }
+  .disclaimer strong {
+    color: var(--text);
+  }
+  .fine {
+    color: var(--muted);
+    font-size: 0.68rem;
+    line-height: 1.8;
+  }
+</style>

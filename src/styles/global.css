@@ -1,0 +1,319 @@
+@import '@fontsource/anton/400.css';
+@import '@fontsource-variable/inter/index.css';
+@import '@fontsource/space-mono/400.css';
+@import '@fontsource/space-mono/700.css';
+
+/* ---------------------------------------------------------------
+   Tokens — "night session in the park": dark snow, sodium-orange
+   park signage, ice-blue highlights.
+---------------------------------------------------------------- */
+:root {
+  --bg: #0a0d12;
+  --bg-2: #11161e;
+  --bg-3: #18202b;
+  --line: #273243;
+  --text: #eef3f8;
+  --muted: #9aa8b8;
+  --orange: #ff5a1f;
+  --orange-ink: #1a0a03;
+  --ice: #8fd3ff;
+  --snow: #ffffff;
+  --ok: #4ade80;
+
+  --font-display: 'Anton', 'Impact', 'Arial Narrow', sans-serif;
+  --font-body: 'Inter Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'Space Mono', ui-monospace, Menlo, monospace;
+
+  --radius: 14px;
+  --radius-sm: 8px;
+  --gutter: clamp(16px, 4vw, 40px);
+  --max: 1280px;
+  --header-h: 64px;
+
+  color-scheme: dark;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-padding-top: calc(var(--header-h) + 16px);
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+}
+
+img,
+svg,
+video,
+iframe {
+  display: block;
+  max-width: 100%;
+}
+img {
+  height: auto;
+}
+
+a {
+  color: inherit;
+}
+a:hover {
+  color: var(--orange);
+}
+
+:focus-visible {
+  outline: 3px solid var(--ice);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+::selection {
+  background: var(--orange);
+  color: var(--orange-ink);
+}
+
+h1,
+h2,
+h3,
+.display {
+  font-family: var(--font-display);
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+  line-height: 0.95;
+  margin: 0;
+}
+h1 {
+  font-size: clamp(2.6rem, 8vw, 6rem);
+}
+h2 {
+  font-size: clamp(2rem, 5vw, 3.4rem);
+}
+h3 {
+  font-size: clamp(1.3rem, 2.4vw, 1.7rem);
+  line-height: 1.05;
+}
+
+p {
+  margin: 0 0 1em;
+}
+
+.mono {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.muted {
+  color: var(--muted);
+}
+
+.wrap {
+  width: 100%;
+  max-width: var(--max);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.section {
+  padding-block: clamp(48px, 8vw, 96px);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.skip-link {
+  position: absolute;
+  left: 16px;
+  top: -60px;
+  z-index: 100;
+  background: var(--orange);
+  color: var(--orange-ink);
+  padding: 10px 16px;
+  border-radius: var(--radius-sm);
+  font-weight: 700;
+  text-decoration: none;
+}
+.skip-link:focus {
+  top: 12px;
+}
+
+/* ---------- Buttons & chips ---------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  padding: 0.8em 1.3em;
+  border-radius: 999px;
+  border: 2px solid var(--text);
+  background: transparent;
+  color: var(--text);
+  font: 700 0.95rem/1 var(--font-body);
+  letter-spacing: 0.02em;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    transform 0.15s ease,
+    background 0.15s ease,
+    color 0.15s ease;
+}
+.btn:hover {
+  background: var(--text);
+  color: var(--bg);
+  transform: translateY(-1px);
+}
+.btn--hot {
+  background: var(--orange);
+  border-color: var(--orange);
+  color: var(--orange-ink);
+}
+.btn--hot:hover {
+  background: var(--snow);
+  border-color: var(--snow);
+  color: var(--orange-ink);
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+  padding: 0.35em 0.75em;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--bg-2);
+  color: var(--muted);
+  font: 700 0.72rem/1.2 var(--font-mono);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* ---------- Grids ---------- */
+.grid {
+  display: grid;
+  gap: clamp(16px, 2.4vw, 28px);
+}
+.grid--3 {
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
+}
+.grid--4 {
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 240px), 1fr));
+}
+
+/* ---------- Page header ---------- */
+.page-head {
+  padding-block: clamp(40px, 7vw, 88px) clamp(24px, 4vw, 40px);
+  border-bottom: 1px solid var(--line);
+  background:
+    radial-gradient(1200px 300px at 85% -40%, rgba(255, 90, 31, 0.18), transparent 70%),
+    linear-gradient(180deg, var(--bg-2), var(--bg));
+}
+.page-head .kicker {
+  color: var(--orange);
+  margin-bottom: 14px;
+  display: block;
+}
+.page-head p {
+  max-width: 60ch;
+  color: var(--muted);
+  margin-top: 18px;
+  font-size: 1.1rem;
+}
+
+/* ---------- Long-form text ---------- */
+.prose {
+  max-width: 68ch;
+  font-size: 1.1rem;
+}
+.prose h2 {
+  font-size: clamp(1.7rem, 3.5vw, 2.3rem);
+  margin: 1.6em 0 0.5em;
+}
+.prose h3 {
+  margin: 1.4em 0 0.4em;
+}
+.prose a {
+  color: var(--ice);
+}
+.prose ul,
+.prose ol {
+  padding-left: 1.2em;
+}
+.prose li {
+  margin-bottom: 0.4em;
+}
+.prose blockquote {
+  margin: 1.5em 0;
+  padding: 0.2em 0 0.2em 1.2em;
+  border-left: 4px solid var(--orange);
+  font-size: 1.2rem;
+  color: var(--text);
+}
+.prose img {
+  border-radius: var(--radius);
+  margin-block: 1.5em;
+}
+.prose code {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+  background: var(--bg-3);
+  padding: 0.1em 0.35em;
+  border-radius: 4px;
+}
+.prose hr {
+  border: 0;
+  border-top: 1px solid var(--line);
+  margin: 2em 0;
+}
+
+/* ---------- Empty state ---------- */
+.empty {
+  border: 2px dashed var(--line);
+  border-radius: var(--radius);
+  padding: 40px 24px;
+  text-align: center;
+  color: var(--muted);
+}
+.empty strong {
+  display: block;
+  color: var(--text);
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  text-transform: uppercase;
+  font-weight: 400;
+  margin-bottom: 6px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

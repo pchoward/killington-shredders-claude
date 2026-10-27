@@ -1,0 +1,92 @@
+---
+import { render } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import PageHead from '../components/PageHead.astro';
+import EventTicket from '../components/EventTicket.astro';
+import site from '../data/site.json';
+import { getEvents } from '../lib/content';
+import { instagramUrl } from '../lib/util';
+
+const events = await getEvents();
+const now = new Date();
+const withContent = await Promise.all(events.map(async (e) => ({ e, Content: (await render(e)).Content })));
+const upcoming = withContent.filter(({ e }) => (e.data.end ?? e.data.start) >= now);
+const past = withContent.filter(({ e }) => (e.data.end ?? e.data.start) < now).reverse().slice(0, 6);
+const insta = instagramUrl(site.social.instagram);
+---
+
+<Base title="Sessions" description="Meetups, film nights and community days for Killington-area freestyle riders.">
+  <PageHead
+    kicker="Sessions"
+    title="Sessions & meetups"
+    intro="Park meetups, film nights and community days. Plans change with the weather — final details always go out on Instagram first."
+  >
+    {insta && <p><a href={insta} class="btn" target="_blank" rel="noopener">Get updates on Instagram ↗</a></p>}
+  </PageHead>
+
+  <section class="section wrap">
+    <h2 class="h">Upcoming</h2>
+    {
+      upcoming.length ? (
+        <div class="list">
+          {upcoming.map(({ e, Content }) => (
+            <EventTicket event={e}>
+              <Content />
+            </EventTicket>
+          ))}
+        </div>
+      ) : (
+        <p class="empty">
+          <strong>Nothing scheduled</strong>Next session will be announced soon.
+        </p>
+      )
+    }
+
+    {
+      past.length > 0 && (
+        <>
+          <h2 class="h past-h">Past sessions</h2>
+          <div class="list">
+            {past.map(({ e, Content }) => (
+              <EventTicket event={e} past>
+                <Content />
+              </EventTicket>
+            ))}
+          </div>
+        </>
+      )
+    }
+
+    <aside class="note">
+      <strong>Good to know.</strong> Community sessions are informal get-togethers organised by riders. They aren't
+      run, sponsored or supervised by Killington Resort or any ski area — you'll need your own ticket or pass, and
+      everyone rides at their own risk and follows the mountain's posted rules.
+    </aside>
+  </section>
+</Base>
+
+<style>
+  .h {
+    margin-bottom: 20px;
+  }
+  .past-h {
+    margin-top: 56px;
+  }
+  .list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 460px), 1fr));
+    gap: 16px;
+  }
+  .note {
+    margin-top: 48px;
+    padding: 20px 24px;
+    border-left: 4px solid var(--ice);
+    background: var(--bg-2);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    color: var(--muted);
+    max-width: 80ch;
+  }
+  .note strong {
+    color: var(--text);
+  }
+</style>

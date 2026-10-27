@@ -1,0 +1,118 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import Poster from './Poster.astro';
+import DemoBadge from './DemoBadge.astro';
+import SizeBadge from './SizeBadge.astro';
+import { href, formatDate, labels } from '../lib/util';
+import { parseVideoUrl } from '../lib/embed';
+
+interface Props {
+  video: CollectionEntry<'videos'>;
+  large?: boolean;
+}
+const { video, large = false } = Astro.props;
+const d = video.data;
+const embed = parseVideoUrl(d.videoUrl);
+const remote = embed?.provider === 'youtube' ? embed.thumb : undefined;
+---
+
+<article
+  class:list={['vcard', { large }]}
+  data-disciplines={d.disciplines.join(' ')}
+  data-features={d.features.join(' ')}
+>
+  <a href={href(`/videos/${video.id}/`)} class="link">
+    <Poster src={d.poster} remote={remote} alt={d.posterAlt ?? ''} sizes={large ? '(max-width: 900px) 100vw, 800px' : undefined}>
+      {d.demo && <DemoBadge floating />}
+      <span class="play" aria-hidden="true">
+        <svg viewBox="0 0 24 24" width="22" height="22"><path d="M8 5v14l11-7z" fill="currentColor" /></svg>
+      </span>
+      {d.duration && <span class="dur mono">{d.duration}</span>}
+    </Poster>
+    <div class="body">
+      <div class="meta mono">
+        <time datetime={d.date.toISOString()}>{formatDate(d.date)}</time>
+        {d.size && <SizeBadge size={d.size} />}
+      </div>
+      <h3>{d.title}</h3>
+      {large && d.summary && <p class="muted">{d.summary}</p>}
+      <div class="chips">
+        {d.disciplines.map((x) => <span class="chip">{labels[x]}</span>)}
+        {d.features.slice(0, 2).map((x) => <span class="chip">{labels[x]}</span>)}
+      </div>
+    </div>
+  </a>
+</article>
+
+<style>
+  .vcard {
+    border-radius: var(--radius);
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    overflow: hidden;
+    transition:
+      transform 0.2s ease,
+      border-color 0.2s ease;
+  }
+  .vcard:hover {
+    transform: translateY(-3px);
+    border-color: var(--orange);
+  }
+  .link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    height: 100%;
+  }
+  .link:hover {
+    color: inherit;
+  }
+  .play {
+    position: absolute;
+    right: 14px;
+    bottom: 14px;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: var(--orange);
+    color: var(--orange-ink);
+    transition: transform 0.2s ease;
+    padding-left: 3px;
+  }
+  .vcard:hover .play {
+    transform: scale(1.1);
+  }
+  .dur {
+    position: absolute;
+    left: 12px;
+    bottom: 12px;
+    background: rgba(10, 13, 18, 0.85);
+    padding: 3px 7px;
+    border-radius: 4px;
+    font-size: 0.7rem;
+  }
+  .body {
+    padding: 16px 18px 20px;
+  }
+  .meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: var(--muted);
+    margin-bottom: 10px;
+    min-height: 24px;
+  }
+  h3 {
+    margin-bottom: 12px;
+  }
+  .large h3 {
+    font-size: clamp(1.8rem, 3.6vw, 2.6rem);
+  }
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+</style>

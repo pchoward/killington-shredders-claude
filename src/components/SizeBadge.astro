@@ -1,0 +1,29 @@
+---
+// Terrain-park style size marker: orange oval with S / M / L / XL.
+interface Props {
+  size: 'S' | 'M' | 'L' | 'XL';
+}
+const { size } = Astro.props;
+const names = { S: 'Small', M: 'Medium', L: 'Large', XL: 'Extra large' };
+---
+
+<span class="size" title={`${names[size]} features`}>
+  <span aria-hidden="true">{size}</span>
+  <span class="sr-only">{names[size]} features</span>
+</span>
+
+<style>
+  .size {
+    display: inline-grid;
+    place-items: center;
+    min-width: 38px;
+    height: 24px;
+    padding-inline: 8px;
+    border-radius: 999px;
+    background: var(--orange);
+    color: var(--orange-ink);
+    font: 400 0.95rem/1 var(--font-display);
+    letter-spacing: 0.04em;
+    box-shadow: inset 0 0 0 2px var(--orange), inset 0 0 0 3.5px var(--orange-ink);
+  }
+</style>

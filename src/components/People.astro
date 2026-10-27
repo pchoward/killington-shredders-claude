@@ -1,0 +1,33 @@
+---
+// Inline list of credited people (crew profiles link internally, others to their handle).
+import { href } from '../lib/util';
+
+interface Person {
+  name: string;
+  link?: string;
+  external: boolean;
+}
+interface Props {
+  people: Person[];
+}
+const { people } = Astro.props;
+---
+
+{
+  people.map((p, i) => (
+    <>
+      {i > 0 && ', '}
+      {p.link ? (
+        p.external ? (
+          <a href={p.link} target="_blank" rel="noopener">
+            {p.name}
+          </a>
+        ) : (
+          <a href={href(p.link)}>{p.name}</a>
+        )
+      ) : (
+        <span>{p.name}</span>
+      )}
+    </>
+  ))
+}

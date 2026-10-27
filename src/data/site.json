@@ -1,0 +1,16 @@
+{
+  "name": "Killington Shredders",
+  "tagline": "Freestyle ski & snowboard culture from the Killington area.",
+  "description": "An independent media and community project for freestyle skiing, snowboarding and terrain-park culture around Killington, Vermont. Rider videos, photos, stories and local sessions.",
+  "showDemoContent": true,
+  "contactEmail": "",
+  "social": {
+    "instagram": "",
+    "youtube": "",
+    "tiktok": ""
+  },
+  "submissions": {
+    "open": false,
+    "formEndpoint": ""
+  }
+}

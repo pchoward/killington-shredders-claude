@@ -1,0 +1,162 @@
+---
+// Progressive-enhancement lightbox: tiles are normal links to photo pages;
+// with JS they open here instead. Arrow keys / swipe to move, Esc to close.
+---
+
+<dialog class="lightbox" aria-label="Photo viewer">
+  <figure>
+    <img alt="" />
+    <figcaption>
+      <span class="lb-demo mono" hidden>Demo placeholder</span>
+      <strong class="lb-title"></strong>
+      <span class="lb-caption"></span>
+      <span class="lb-credit mono"></span>
+      <a class="lb-link mono" href="#">Open photo page →</a>
+    </figcaption>
+  </figure>
+  <button class="lb-btn lb-close" type="button" aria-label="Close">✕</button>
+  <button class="lb-btn lb-prev" type="button" aria-label="Previous photo">←</button>
+  <button class="lb-btn lb-next" type="button" aria-label="Next photo">→</button>
+</dialog>
+
+<script>
+  const dlg = document.querySelector<HTMLDialogElement>('dialog.lightbox');
+  const links = Array.from(document.querySelectorAll<HTMLAnchorElement>('a[data-lightbox]'));
+  if (dlg && links.length && typeof dlg.showModal === 'function') {
+    const img = dlg.querySelector('img')!;
+    const q = (s: string) => dlg.querySelector<HTMLElement>(s)!;
+    let i = 0;
+    const show = (n: number) => {
+      i = (n + links.length) % links.length;
+      const a = links[i];
+      img.src = a.dataset.full!;
+      img.alt = a.dataset.alt ?? '';
+      q('.lb-title').textContent = a.dataset.title ?? '';
+      q('.lb-caption').textContent = a.dataset.caption ?? '';
+      q('.lb-credit').textContent = a.dataset.credit ?? '';
+      q('.lb-demo').hidden = a.dataset.demo !== 'true';
+      (q('.lb-link') as HTMLAnchorElement).href = a.href;
+    };
+    links.forEach((a, n) =>
+      a.addEventListener('click', (e) => {
+        if (e.metaKey || e.ctrlKey || e.shiftKey) return;
+        e.preventDefault();
+        show(n);
+        dlg.showModal();
+      }),
+    );
+    q('.lb-close').addEventListener('click', () => dlg.close());
+    q('.lb-prev').addEventListener('click', () => show(i - 1));
+    q('.lb-next').addEventListener('click', () => show(i + 1));
+    dlg.addEventListener('click', (e) => {
+      if (e.target === dlg) dlg.close();
+    });
+    dlg.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') show(i - 1);
+      if (e.key === 'ArrowRight') show(i + 1);
+    });
+    let x0: number | null = null;
+    dlg.addEventListener('touchstart', (e) => (x0 = e.touches[0].clientX), { passive: true });
+    dlg.addEventListener('touchend', (e) => {
+      if (x0 === null) return;
+      const dx = e.changedTouches[0].clientX - x0;
+      if (Math.abs(dx) > 50) show(dx < 0 ? i + 1 : i - 1);
+      x0 = null;
+    });
+  }
+</script>
+
+<style>
+  .lightbox {
+    width: 100vw;
+    height: 100dvh;
+    max-width: none;
+    max-height: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: rgba(5, 7, 10, 0.96);
+    color: var(--text);
+  }
+  .lightbox::backdrop {
+    background: rgba(0, 0, 0, 0.7);
+  }
+  figure {
+    margin: 0;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    padding: 56px 16px 20px;
+  }
+  img {
+    max-width: min(100%, 1400px);
+    max-height: calc(100dvh - 190px);
+    width: auto;
+    object-fit: contain;
+    border-radius: var(--radius-sm);
+  }
+  figcaption {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    text-align: center;
+    max-width: 60ch;
+  }
+  .lb-caption {
+    color: var(--muted);
+    font-size: 0.95rem;
+  }
+  .lb-credit {
+    color: var(--muted);
+    font-size: 0.7rem;
+  }
+  .lb-demo {
+    color: var(--orange);
+  }
+  .lb-link {
+    color: var(--orange);
+    font-size: 0.7rem;
+  }
+  .lb-btn {
+    position: absolute;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: 1px solid var(--line);
+    background: var(--bg-2);
+    color: var(--text);
+    font-size: 1.2rem;
+    cursor: pointer;
+  }
+  .lb-btn:hover {
+    background: var(--orange);
+    color: var(--orange-ink);
+  }
+  .lb-close {
+    top: 12px;
+    right: 12px;
+  }
+  .lb-prev,
+  .lb-next {
+    top: 50%;
+    translate: 0 -50%;
+  }
+  .lb-prev {
+    left: 12px;
+  }
+  .lb-next {
+    right: 12px;
+  }
+  @media (max-width: 700px) {
+    .lb-prev,
+    .lb-next {
+      top: auto;
+      bottom: 16px;
+      translate: none;
+    }
+  }
+</style>

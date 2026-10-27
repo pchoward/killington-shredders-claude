@@ -1,0 +1,61 @@
+---
+import { href } from '../lib/util';
+---
+
+<aside class="demo-banner" aria-label="Preview notice">
+  <div class="wrap inner">
+    <span class="tag mono">Preview</span>
+    <p>
+      Items marked <span class="demo-mark">Demo</span> are placeholders<span class="long">{' '}with generated artwork</span> — not real riders, footage or events.{' '}
+      <a href={href('/about/#demo-content')}>Learn more</a>
+    </p>
+  </div>
+</aside>
+
+<style>
+  .demo-banner {
+    background: repeating-linear-gradient(135deg, #ff5a1f 0 14px, #ff6f3c 14px 28px);
+    color: var(--orange-ink);
+    font-size: 0.88rem;
+    font-weight: 600;
+  }
+  .inner {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding-block: 8px;
+  }
+  .tag {
+    background: var(--orange-ink);
+    color: var(--orange);
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 0.68rem;
+    flex-shrink: 0;
+  }
+  p {
+    margin: 0;
+    line-height: 1.35;
+  }
+  a {
+    color: var(--orange-ink);
+    font-weight: 800;
+  }
+  @media (max-width: 600px) {
+    .long {
+      display: none;
+    }
+    .demo-banner {
+      font-size: 0.8rem;
+    }
+  }
+  .demo-mark {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    background: var(--orange-ink);
+    color: #fff;
+    padding: 1px 5px;
+    border-radius: 3px;
+  }
+</style>

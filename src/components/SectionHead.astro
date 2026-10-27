@@ -1,0 +1,50 @@
+---
+import { href } from '../lib/util';
+
+interface Props {
+  index?: string;
+  title: string;
+  link?: { label: string; path: string };
+}
+const { index, title, link } = Astro.props;
+---
+
+<div class="shead">
+  <div>
+    {index && <span class="mono idx">{index}</span>}
+    <h2>{title}</h2>
+  </div>
+  {
+    link && (
+      <a href={href(link.path)} class="all mono">
+        {link.label} →
+      </a>
+    )
+  }
+</div>
+
+<style>
+  .shead {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: clamp(20px, 3vw, 32px);
+    padding-bottom: 14px;
+    border-bottom: 2px solid var(--text);
+  }
+  .idx {
+    display: block;
+    color: var(--orange);
+    margin-bottom: 8px;
+  }
+  .all {
+    color: var(--text);
+    text-decoration: none;
+    white-space: nowrap;
+    padding-bottom: 6px;
+  }
+  .all:hover {
+    color: var(--orange);
+  }
+</style>

@@ -1,0 +1,219 @@
+---
+import Logo from './Logo.astro';
+import { href } from '../lib/util';
+
+const nav = [
+  { label: 'Videos', path: '/videos/' },
+  { label: 'Photos', path: '/photos/' },
+  { label: 'Stories', path: '/stories/' },
+  { label: 'Crew', path: '/crew/' },
+  { label: 'Sessions', path: '/sessions/' },
+  { label: 'Park Dictionary', path: '/dictionary/' },
+];
+const current = Astro.url.pathname.replace(import.meta.env.BASE_URL.replace(/\/$/, ''), '') || '/';
+const isActive = (path: string) => current.startsWith(path);
+---
+
+<header class="site-header">
+  <div class="wrap bar">
+    <a href={href('/')} class="home" aria-label="Killington Shredders — home">
+      <Logo size={34} />
+    </a>
+
+    <button class="menu-btn" aria-expanded="false" aria-controls="site-nav">
+      <span class="sr-only">Menu</span>
+      <span class="burger" aria-hidden="true"><span></span><span></span><span></span></span>
+    </button>
+
+    <nav id="site-nav" class="nav" aria-label="Main">
+      <ul>
+        {
+          nav.map((item) => (
+            <li>
+              <a href={href(item.path)} aria-current={isActive(item.path) ? 'page' : undefined}>
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+      <a href={href('/share/')} class="btn btn--hot share">Share a clip</a>
+    </nav>
+  </div>
+</header>
+
+<script>
+  const btn = document.querySelector<HTMLButtonElement>('.menu-btn');
+  const nav = document.getElementById('site-nav');
+  btn?.addEventListener('click', () => {
+    const open = btn.getAttribute('aria-expanded') === 'true';
+    btn.setAttribute('aria-expanded', String(!open));
+    nav?.classList.toggle('open', !open);
+    document.body.classList.toggle('nav-open', !open);
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && btn?.getAttribute('aria-expanded') === 'true') {
+      btn.click();
+      btn.focus();
+    }
+  });
+</script>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: rgba(10, 13, 18, 0.82);
+    backdrop-filter: blur(14px) saturate(1.4);
+    -webkit-backdrop-filter: blur(14px) saturate(1.4);
+    border-bottom: 1px solid var(--line);
+  }
+  .bar {
+    height: var(--header-h);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+  }
+  .home {
+    text-decoration: none;
+    color: var(--text);
+    flex-shrink: 0;
+  }
+  .home:hover {
+    color: var(--text);
+  }
+  .nav {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+  .nav ul {
+    display: flex;
+    gap: 4px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .nav ul a {
+    display: block;
+    padding: 8px 12px;
+    border-radius: 999px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.93rem;
+    color: var(--muted);
+  }
+  .nav ul a:hover {
+    color: var(--text);
+    background: var(--bg-3);
+  }
+  .nav ul a[aria-current='page'] {
+    color: var(--text);
+    box-shadow: inset 0 -2px 0 var(--orange);
+    border-radius: 0;
+  }
+  .share {
+    padding: 0.65em 1.1em;
+    font-size: 0.88rem;
+  }
+
+  .menu-btn {
+    display: none;
+    background: none;
+    border: 0;
+    padding: 10px;
+    margin-right: -10px;
+    cursor: pointer;
+    color: var(--text);
+  }
+  .burger {
+    display: grid;
+    gap: 5px;
+    width: 24px;
+  }
+  .burger span {
+    height: 2px;
+    background: currentColor;
+    border-radius: 2px;
+    transition:
+      transform 0.2s ease,
+      opacity 0.2s ease;
+  }
+  .menu-btn[aria-expanded='true'] .burger span:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+  }
+  .menu-btn[aria-expanded='true'] .burger span:nth-child(2) {
+    opacity: 0;
+  }
+  .menu-btn[aria-expanded='true'] .burger span:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+  }
+
+  @media (max-width: 1060px) {
+    .menu-btn {
+      display: block;
+    }
+    .nav {
+      position: fixed;
+      inset: var(--header-h) 0 0 0;
+      flex-direction: column;
+      align-items: stretch;
+      justify-content: flex-start;
+      gap: 24px;
+      padding: 24px var(--gutter) 40px;
+      background: var(--bg);
+      overflow-y: auto;
+      visibility: hidden;
+      opacity: 0;
+      transform: translateY(-8px);
+      transition:
+        opacity 0.2s ease,
+        transform 0.2s ease,
+        visibility 0s linear 0.2s;
+    }
+    .nav.open {
+      visibility: visible;
+      opacity: 1;
+      transform: none;
+      transition:
+        opacity 0.2s ease,
+        transform 0.2s ease;
+    }
+    .nav ul {
+      flex-direction: column;
+      gap: 0;
+    }
+    .nav ul a {
+      font-family: var(--font-display);
+      text-transform: uppercase;
+      font-weight: 400;
+      font-size: 2.1rem;
+      line-height: 1;
+      padding: 14px 0;
+      border-radius: 0;
+      border-bottom: 1px solid var(--line);
+      color: var(--text);
+    }
+    .nav ul a:hover {
+      background: none;
+      color: var(--orange);
+    }
+    .nav ul a[aria-current='page'] {
+      box-shadow: none;
+      color: var(--orange);
+    }
+    .share {
+      justify-content: center;
+      font-size: 1rem;
+      padding: 1em;
+    }
+  }
+</style>
+
+<style is:global>
+  body.nav-open {
+    overflow: hidden;
+  }
+</style>

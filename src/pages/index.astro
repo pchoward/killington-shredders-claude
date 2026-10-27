@@ -1,0 +1,362 @@
+---
+import { Image } from 'astro:assets';
+import { render } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import Snowfall from '../components/Snowfall.astro';
+import SectionHead from '../components/SectionHead.astro';
+import VideoCard from '../components/VideoCard.astro';
+import StoryCard from '../components/StoryCard.astro';
+import PhotoTile from '../components/PhotoTile.astro';
+import EventTicket from '../components/EventTicket.astro';
+import Lightbox from '../components/Lightbox.astro';
+import site from '../data/site.json';
+import glossary from '../data/glossary.json';
+import { getVideos, getPhotos, getStories, getEvents, featuredFirst } from '../lib/content';
+import { href, instagramUrl } from '../lib/util';
+
+const videos = featuredFirst(await getVideos());
+const [leadVideo, ...moreVideos] = videos;
+const stories = featuredFirst(await getStories()).slice(0, 3);
+const photos = (await getPhotos()).slice(0, 8);
+const now = new Date();
+const upcoming = (await getEvents()).filter((e) => (e.data.end ?? e.data.start) >= now).slice(0, 3);
+const rendered = await Promise.all(upcoming.map(async (e) => ({ e, Content: (await render(e)).Content })));
+
+// "Word of the day" rotates with each build/day.
+const dayIndex = Math.floor(now.valueOf() / 86_400_000) % glossary.length;
+const word = glossary[dayIndex];
+
+const heroImage = photos.find((p) => p.data.featured)?.data.image ?? leadVideo?.data.poster;
+const insta = instagramUrl(site.social.instagram);
+const ticker = ['Rider edits', 'Park laps', 'Photo drops', 'Night sessions', 'Rail gardens', 'Spring slush', 'Local crews', 'Film nights'];
+---
+
+<Base>
+  <section class="hero">
+    {heroImage && <Image src={heroImage} alt="" class="hero-bg" layout="full-width" loading="eager" fetchpriority="high" />}
+    <div class="hero-shade"></div>
+    <Snowfall />
+    <div class="wrap hero-inner">
+      <p class="mono eyebrow">Independent freestyle media · Killington, Vermont</p>
+      <h1>
+        <span>Ride it.</span>
+        <span>Film it.</span>
+        <span class="hot">Share it.</span>
+      </h1>
+      <p class="lede">
+        Rider edits, photos and stories from the Killington-area freestyle scene. Skiers and snowboarders, park rats
+        and jib kids — this is your highlight reel.
+      </p>
+      <div class="ctas">
+        <a href={href('/videos/')} class="btn btn--hot">Watch the edits</a>
+        <a href={href('/share/')} class="btn">Share a clip</a>
+      </div>
+    </div>
+    <div class="ticker" aria-hidden="true">
+      <div class="track">
+        {[...ticker, ...ticker].map((t) => <span>{t}<i>●</i></span>)}
+      </div>
+    </div>
+  </section>
+
+  <section class="section wrap" aria-label="Latest edits">
+    <SectionHead index="01" title="Latest edits" link={{ label: 'All videos', path: '/videos/' }} />
+    {
+      leadVideo ? (
+        <div class="vid-grid">
+          <VideoCard video={leadVideo} large />
+          <div class="vid-side">
+            {moreVideos.slice(0, 2).map((v) => (
+              <VideoCard video={v} />
+            ))}
+          </div>
+        </div>
+      ) : (
+        <p class="empty">
+          <strong>First edit dropping soon</strong>
+          Follow along on Instagram while the first clips are cut.
+        </p>
+      )
+    }
+  </section>
+
+  {
+    photos.length > 0 && (
+      <section class="section photo-band" aria-label="Photos">
+        <div class="wrap">
+          <SectionHead index="02" title="Photo wall" link={{ label: 'All photos', path: '/photos/' }} />
+          <div class="strip">
+            {photos.slice(0, 4).map((p, i) => (
+              <PhotoTile photo={p} index={i} />
+            ))}
+          </div>
+        </div>
+        <Lightbox />
+      </section>
+    )
+  }
+
+  <section class="section wrap" aria-label="Stories">
+    <SectionHead index="03" title="Stories" link={{ label: 'All stories', path: '/stories/' }} />
+    <div class="grid grid--3">
+      {stories.map((s) => <StoryCard story={s} />)}
+    </div>
+  </section>
+
+  <section class="section wrap split" aria-label="Sessions and dictionary">
+    <div>
+      <SectionHead index="04" title="Upcoming sessions" link={{ label: 'All sessions', path: '/sessions/' }} />
+      <div class="tickets">
+        {
+          rendered.length ? (
+            rendered.map(({ e, Content }) => (
+              <EventTicket event={e}>
+                <Content />
+              </EventTicket>
+            ))
+          ) : (
+            <p class="empty">
+              <strong>Nothing on the calendar yet</strong>
+              Sessions get announced on Instagram first.
+            </p>
+          )
+        }
+      </div>
+    </div>
+    <aside class="word">
+      <span class="mono">Park Dictionary · Word of the day</span>
+      <h3 class="term">{word.term}</h3>
+      <p>{word.definition}</p>
+      <a href={href('/dictionary/')} class="mono">Browse the dictionary →</a>
+    </aside>
+  </section>
+
+  <section class="wrap">
+    <div class="cta-band">
+      <div>
+        <h2>Got a clip?</h2>
+        <p>
+          Landed something you're proud of? Got a sick shot of your crew? We want to see it. Tag us, send it in, and
+          we'll credit you properly — always.
+        </p>
+      </div>
+      <div class="cta-actions">
+        <a href={href('/share/')} class="btn btn--hot">How to share</a>
+        {insta && <a href={insta} class="btn" target="_blank" rel="noopener">Follow on Instagram ↗</a>}
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .hero {
+    position: relative;
+    min-height: min(88vh, 820px);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    overflow: hidden;
+    isolation: isolate;
+    background: #05070a;
+  }
+  .hero :global(.hero-bg) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -2;
+    opacity: 0.55;
+  }
+  .hero-shade {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background:
+      linear-gradient(180deg, rgba(10, 13, 18, 0.2) 0%, rgba(10, 13, 18, 0.55) 55%, var(--bg) 100%),
+      linear-gradient(90deg, rgba(10, 13, 18, 0.85) 0%, transparent 70%);
+  }
+  .hero-inner {
+    position: relative;
+    z-index: 2;
+    padding-block: 120px 56px;
+  }
+  .eyebrow {
+    color: var(--orange);
+    margin-bottom: 18px;
+  }
+  .hero h1 {
+    font-size: clamp(3.4rem, 13vw, 10rem);
+    line-height: 0.86;
+    display: flex;
+    flex-direction: column;
+  }
+  .hero h1 .hot {
+    color: var(--orange);
+  }
+  .lede {
+    max-width: 52ch;
+    font-size: clamp(1.05rem, 1.8vw, 1.3rem);
+    color: #d5dee8;
+    margin-top: 26px;
+  }
+  .ctas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 28px;
+  }
+
+  .ticker {
+    position: relative;
+    z-index: 2;
+    border-block: 1px solid var(--line);
+    background: var(--orange);
+    color: var(--orange-ink);
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  .track {
+    display: inline-flex;
+    animation: marquee 40s linear infinite;
+    padding-block: 10px;
+  }
+  .track span {
+    font-family: var(--font-display);
+    text-transform: uppercase;
+    font-size: 1.25rem;
+    letter-spacing: 0.04em;
+    padding-inline: 18px;
+    display: inline-flex;
+    align-items: center;
+    gap: 36px;
+  }
+  .track i {
+    font-style: normal;
+    font-size: 0.6rem;
+  }
+  @keyframes marquee {
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  .vid-grid {
+    display: grid;
+    grid-template-columns: 1.7fr 1fr;
+    gap: clamp(16px, 2.4vw, 28px);
+  }
+  .vid-side {
+    display: grid;
+    gap: clamp(16px, 2.4vw, 28px);
+    align-content: start;
+  }
+  @media (max-width: 900px) {
+    .vid-grid {
+      grid-template-columns: 1fr;
+    }
+    .vid-side {
+      grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
+    }
+  }
+
+  .photo-band {
+    background: var(--bg-2);
+    border-block: 1px solid var(--line);
+  }
+  .strip {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: clamp(10px, 1.6vw, 18px);
+    align-items: start;
+  }
+  @media (max-width: 800px) {
+    .strip {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  .strip :global(.tile) {
+    margin: 0;
+  }
+
+  .split {
+    display: grid;
+    grid-template-columns: 1.6fr 1fr;
+    gap: clamp(24px, 4vw, 56px);
+    align-items: start;
+  }
+  @media (max-width: 900px) {
+    .split {
+      grid-template-columns: 1fr;
+    }
+  }
+  .tickets {
+    display: grid;
+    gap: 16px;
+  }
+  .word {
+    background: var(--snow);
+    color: var(--orange-ink);
+    border-radius: var(--radius);
+    padding: 28px;
+    position: sticky;
+    top: calc(var(--header-h) + 24px);
+    box-shadow: 8px 8px 0 var(--orange);
+  }
+  .word .mono {
+    color: #7a3a1a;
+  }
+  .word .term {
+    font-size: clamp(2rem, 4vw, 2.8rem);
+    margin: 14px 0 12px;
+  }
+  .word a {
+    color: var(--orange-ink);
+    font-weight: 700;
+  }
+
+  .cta-band {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    padding: clamp(28px, 5vw, 56px);
+    border-radius: calc(var(--radius) * 1.5);
+    background:
+      radial-gradient(600px 240px at 100% 0%, rgba(143, 211, 255, 0.25), transparent 70%),
+      linear-gradient(135deg, #ff5a1f, #ff7e3f);
+    color: var(--orange-ink);
+  }
+  .cta-band h2 {
+    font-size: clamp(2.4rem, 6vw, 4.4rem);
+    margin-bottom: 12px;
+  }
+  .cta-band p {
+    max-width: 52ch;
+    margin: 0;
+    font-weight: 500;
+  }
+  .cta-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .cta-band .btn {
+    border-color: var(--orange-ink);
+    color: var(--orange-ink);
+  }
+  .cta-band .btn:hover {
+    background: var(--orange-ink);
+    color: var(--snow);
+  }
+  .cta-band .btn--hot {
+    background: var(--orange-ink);
+    color: var(--snow);
+  }
+  .cta-band .btn--hot:hover {
+    background: var(--snow);
+    color: var(--orange-ink);
+    border-color: var(--snow);
+  }
+</style>

@@ -1,0 +1,14 @@
+---
+// Wraps rendered Markdown. Root-relative links written in content ("/about/")
+// are rewritten to include the site base, so they keep working when the site
+// is served from a sub-path such as GitHub Pages project sites.
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+let html = await Astro.slots.render('default');
+if (base) {
+  html = html.replace(/(href|src)="(\/(?!\/)[^"]*)"/g, (m, attr, path) =>
+    path.startsWith(`${base}/`) ? m : `${attr}="${base}${path}"`,
+  );
+}
+---
+
+<div class="prose"><Fragment set:html={html} /></div>

@@ -1,0 +1,30 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHead from '../../components/PageHead.astro';
+import StoryCard from '../../components/StoryCard.astro';
+import { getStories } from '../../lib/content';
+
+const stories = await getStories();
+---
+
+<Base title="Stories" description="Session reports, interviews and how-tos from the Killington-area freestyle community.">
+  <PageHead kicker="Stories" title="Stories" intro="Session reports, rider interviews, how-tos and news from the scene." />
+  <section class="section wrap">
+    {
+      stories.length ? (
+        <>
+        <h2 class="sr-only">All stories</h2>
+        <div class="grid grid--3">
+          {stories.map((s) => (
+            <StoryCard story={s} />
+          ))}
+        </div>
+        </>
+      ) : (
+        <p class="empty">
+          <strong>No stories yet</strong>Words incoming.
+        </p>
+      )
+    }
+  </section>
+</Base>

@@ -1,0 +1,278 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHead from '../components/PageHead.astro';
+import site from '../data/site.json';
+import { href, instagramUrl } from '../lib/util';
+
+const { open, formEndpoint } = site.submissions;
+const email = site.contactEmail;
+const insta = instagramUrl(site.social.instagram);
+const live = open && Boolean(formEndpoint || email);
+---
+
+<Base title="Share a clip" description="How to share your freestyle clips and photos with Killington Shredders — and how we credit and protect your work.">
+  <PageHead
+    kicker="Share a clip"
+    title="Get in the feed"
+    intro="Landed something? Shot something? We want to see it. Here's how sharing works, and the promises we make about your work."
+  />
+
+  <section class="section wrap cols">
+    <div>
+      <h2 class="h">Right now</h2>
+      <ol class="steps">
+        <li>
+          <span class="n">1</span>
+          <div>
+            <h3>Post it & tag us</h3>
+            <p>
+              Post your clip or photo on Instagram and tag{' '}
+              {insta ? <a href={insta} target="_blank" rel="noopener">us</a> : 'Killington Shredders'}. Mention who's riding and
+              who filmed.
+            </p>
+          </div>
+        </li>
+        <li>
+          <span class="n">2</span>
+          <div>
+            <h3>We ask first</h3>
+            <p>If we'd like to feature it, we'll message you and ask. Nothing goes on the site without a clear yes.</p>
+          </div>
+        </li>
+        <li>
+          <span class="n">3</span>
+          <div>
+            <h3>You get the credit</h3>
+            <p>Every piece shows the rider and creator, linked to your profile. You keep all rights to your work.</p>
+          </div>
+        </li>
+      </ol>
+
+      <h2 class="h rules-h">The ground rules</h2>
+      <ul class="rules">
+        <li><strong>It's yours, or you have permission.</strong> You shot it, or the person who did is OK with you sending it.</li>
+        <li><strong>Everyone in it is cool with it.</strong> Riders who are clearly recognisable should know it's being shared.</li>
+        <li><strong>Under 18?</strong> We need a parent or guardian's OK before we feature you.</li>
+        <li><strong>Open terrain only.</strong> No closed trails, roped-off features or anything that breaks mountain rules. We won't post it.</li>
+        <li><strong>Keep it clean.</strong> No hate, harassment, or anything you wouldn't show your little cousin.</li>
+        <li><strong>Changed your mind?</strong> Ask, and we'll take it down. <a href={href('/about/#takedown')}>Takedown policy</a></li>
+      </ul>
+    </div>
+
+    <div class="form-card">
+      <div class="form-head">
+        <h2 class="h">Send it in</h2>
+        {!live && <span class="chip soon">Opening soon</span>}
+      </div>
+      {
+        !live && (
+          <p class="notice">
+            Direct submissions aren't open yet — this is a preview of the form. Until then, tag or DM us on Instagram.
+          </p>
+        )
+      }
+      <form
+        id="submit-form"
+        method="post"
+        action={formEndpoint || undefined}
+        data-email={email}
+        data-live={live ? 'true' : 'false'}
+      >
+        <fieldset disabled={!live}>
+          <div class="row">
+            <label>Your name<input name="name" required autocomplete="name" /></label>
+            <label>Instagram handle<input name="instagram" placeholder="@yourhandle" /></label>
+          </div>
+          <label>Your email<input type="email" name="email" required autocomplete="email" /></label>
+          <label>
+            Link to the clip or photo
+            <input type="url" name="link" required placeholder="Instagram, YouTube, Vimeo, Google Drive, Dropbox…" />
+          </label>
+          <div class="row">
+            <label>Who's riding?<input name="riders" placeholder="Names / handles" /></label>
+            <label>Who filmed / shot it?<input name="creator" placeholder="Name / handle" /></label>
+          </div>
+          <label>Anything else?<textarea name="notes" rows="3" placeholder="Trick names, the story behind it, music…"></textarea></label>
+          <div class="checks">
+            <label class="check"><input type="checkbox" name="rights" required /> I made this, or I have the creator's permission to share it.</label>
+            <label class="check"><input type="checkbox" name="riders_ok" required /> The riders in it are OK with it being shared (with a parent/guardian's OK for anyone under 18).</label>
+            <label class="check"><input type="checkbox" name="credit" required /> Killington Shredders may post it on this site and its social channels, with credit. I can ask for it to be removed at any time.</label>
+          </div>
+          <button class="btn btn--hot" type="submit">Send submission</button>
+        </fieldset>
+      </form>
+      <p class="fine mono">We only use your details to contact you about this submission.</p>
+    </div>
+  </section>
+</Base>
+
+<script>
+  // With no form service configured, fall back to a pre-filled email.
+  const form = document.querySelector<HTMLFormElement>('#submit-form');
+  form?.addEventListener('submit', (e) => {
+    if (form.dataset.live !== 'true' || form.getAttribute('action')) return;
+    e.preventDefault();
+    const data = new FormData(form);
+    const body = [...data.entries()].map(([k, v]) => `${k}: ${v === 'on' ? 'yes' : v}`).join('\n');
+    location.href = `mailto:${form.dataset.email}?subject=${encodeURIComponent('Clip submission')}&body=${encodeURIComponent(body)}`;
+  });
+</script>
+
+<style>
+  .cols {
+    display: grid;
+    grid-template-columns: 1fr minmax(0, 520px);
+    gap: clamp(32px, 5vw, 72px);
+    align-items: start;
+  }
+  @media (max-width: 960px) {
+    .cols {
+      grid-template-columns: 1fr;
+    }
+  }
+  .h {
+    font-size: clamp(1.8rem, 4vw, 2.6rem);
+    margin-bottom: 20px;
+  }
+  .steps {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 20px;
+  }
+  .steps li {
+    display: flex;
+    gap: 18px;
+  }
+  .n {
+    flex-shrink: 0;
+    width: 44px;
+    height: 30px;
+    border-radius: 999px;
+    background: var(--orange);
+    color: var(--orange-ink);
+    display: grid;
+    place-items: center;
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+  }
+  .steps h3 {
+    margin-bottom: 6px;
+  }
+  .steps p {
+    color: var(--muted);
+    margin: 0;
+  }
+  .steps a,
+  .rules a {
+    color: var(--ice);
+  }
+  .rules-h {
+    margin-top: 48px;
+  }
+  .rules {
+    padding-left: 1.1em;
+    color: var(--muted);
+  }
+  .rules li {
+    margin-bottom: 10px;
+  }
+  .rules strong {
+    color: var(--text);
+  }
+  .form-card {
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    border-radius: calc(var(--radius) * 1.4);
+    padding: clamp(20px, 3vw, 32px);
+    position: sticky;
+    top: calc(var(--header-h) + 24px);
+  }
+  .form-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .form-head .h {
+    margin: 0;
+  }
+  .soon {
+    color: var(--orange);
+    border-color: var(--orange);
+  }
+  .notice {
+    margin: 16px 0 0;
+    font-size: 0.92rem;
+    color: var(--muted);
+  }
+  fieldset {
+    border: 0;
+    padding: 0;
+    margin: 20px 0 0;
+    display: grid;
+    gap: 14px;
+  }
+  fieldset:disabled {
+    opacity: 0.55;
+  }
+  .row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+  @media (max-width: 520px) {
+    .row {
+      grid-template-columns: 1fr;
+    }
+  }
+  label {
+    display: grid;
+    gap: 6px;
+    font-weight: 600;
+    font-size: 0.9rem;
+  }
+  input:not([type='checkbox']),
+  textarea {
+    font: 500 1rem var(--font-body);
+    padding: 12px 14px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--line);
+    background: var(--bg);
+    color: var(--text);
+    width: 100%;
+  }
+  input:focus,
+  textarea:focus {
+    border-color: var(--orange);
+    outline: none;
+  }
+  .checks {
+    display: grid;
+    gap: 10px;
+    margin-block: 6px;
+  }
+  .check {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    font-weight: 500;
+    color: var(--muted);
+  }
+  .check input {
+    margin-top: 4px;
+    accent-color: var(--orange);
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+  }
+  button[type='submit'] {
+    justify-self: start;
+  }
+  .fine {
+    color: var(--muted);
+    font-size: 0.64rem;
+    margin: 16px 0 0;
+  }
+</style>

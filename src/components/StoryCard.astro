@@ -1,0 +1,79 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import Poster from './Poster.astro';
+import DemoBadge from './DemoBadge.astro';
+import { href, formatDate } from '../lib/util';
+
+interface Props {
+  story: CollectionEntry<'stories'>;
+}
+const { story } = Astro.props;
+const d = story.data;
+const kinds: Record<string, string> = {
+  feature: 'Feature',
+  interview: 'Interview',
+  'how-to': 'How-to',
+  'session-report': 'Session report',
+  news: 'News',
+};
+---
+
+<article class="scard">
+  <a href={href(`/stories/${story.id}/`)} class="link">
+    <Poster src={d.cover} alt={d.coverAlt ?? ''} ratio="3 / 2">
+      {d.demo && <DemoBadge floating />}
+    </Poster>
+    <div class="body">
+      <p class="meta mono"><span class="kind">{kinds[d.kind]}</span> · <time datetime={d.date.toISOString()}>{formatDate(d.date)}</time></p>
+      <h3>{d.title}</h3>
+      <p class="muted excerpt">{d.excerpt}</p>
+      <span class="more mono">Read →</span>
+    </div>
+  </a>
+</article>
+
+<style>
+  .scard {
+    border-radius: var(--radius);
+    overflow: hidden;
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    transition: border-color 0.2s ease;
+  }
+  .scard:hover {
+    border-color: var(--orange);
+  }
+  .link {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    color: inherit;
+    text-decoration: none;
+  }
+  .link:hover {
+    color: inherit;
+  }
+  .body {
+    padding: 18px 20px 22px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+  .meta {
+    color: var(--muted);
+    margin-bottom: 10px;
+  }
+  .kind {
+    color: var(--ice);
+  }
+  h3 {
+    margin-bottom: 10px;
+  }
+  .excerpt {
+    font-size: 0.97rem;
+    flex: 1;
+  }
+  .more {
+    color: var(--orange);
+  }
+</style>
