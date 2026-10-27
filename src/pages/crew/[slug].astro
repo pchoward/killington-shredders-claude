@@ -39,6 +39,7 @@ const insta = instagramUrl(d.handle);
           <div><dt class="mono">Rides</dt><dd>{d.disciplines.map((x) => labels[x]).join(' / ') || '—'}</dd></div>
           {d.stance && d.stance !== 'n/a' && <div><dt class="mono">Stance</dt><dd>{d.stance}</dd></div>}
           {d.favoriteFeature && <div><dt class="mono">Go-to feature</dt><dd>{d.favoriteFeature}</dd></div>}
+          {d.alsoRides && <div><dt class="mono">Off the snow</dt><dd class="plain">{d.alsoRides}</dd></div>}
           {d.hometown && <div><dt class="mono">Home</dt><dd>{d.hometown}</dd></div>}
         </dl>
         <Prose><Content /></Prose>
@@ -138,5 +139,8 @@ const insta = instagramUrl(d.handle);
   }
   .h {
     margin-bottom: 24px;
+  }
+  dd.plain {
+    text-transform: none;
   }
 </style>

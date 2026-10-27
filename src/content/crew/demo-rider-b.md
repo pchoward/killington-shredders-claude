@@ -1,8 +1,9 @@
 ---
 name: Demo Rider B
-disciplines: [ski]
+disciplines: [ski, mtb]
 stance: n/a
 favoriteFeature: Side hits
+alsoRides: "Summer: flow trails"
 hometown: Placeholder, VT
 portrait: ../../assets/demo/kicker-bluebird.jpg
 portraitAlt: Placeholder illustration of an anonymous rider silhouette

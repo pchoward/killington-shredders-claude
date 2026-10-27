@@ -3,6 +3,7 @@ import type { CollectionEntry } from 'astro:content';
 import { Image, getImage } from 'astro:assets';
 import DemoBadge from './DemoBadge.astro';
 import { href } from '../lib/util';
+import { filterTokens } from '../lib/taxonomy';
 
 interface Props {
   photo: CollectionEntry<'photos'>;
@@ -15,7 +16,7 @@ const full = await getImage({ src: d.image, width: 1800 });
 const span = Math.round((280 * (d.image.height / d.image.width) + 16) / 8);
 ---
 
-<figure class="tile" data-disciplines={d.disciplines.join(' ')} style={`--span:${span}`}>
+<figure class="tile" data-disciplines={filterTokens(d.disciplines)} style={`--span:${span}`}>
   <a
     href={href(`/photos/${photo.id}/`)}
     class="open"

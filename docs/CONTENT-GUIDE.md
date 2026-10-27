@@ -6,6 +6,18 @@ There are three ways to add content. Use whichever suits you:
 2. **GitHub's web editor.** Open a file in `src/content/…`, click the pencil icon, edit and commit. To add a file, use "Add file → Create new file" and copy an existing entry as a template.
 3. **Locally.** Run `npm run new -- video "Title"` to scaffold a file, edit it, preview with `npm run dev`, then commit and push.
 
+## Snow first: disciplines and families
+
+Every video, photo and crew profile has `disciplines`: `ski`, `snowboard`, `mtb`, `skate`, `bmx`. The site groups them into **families**: Snow (ski, snowboard), Bike (MTB) and Skate · BMX. Families drive colours (orange, moss, concrete), filters and where things appear on the homepage. Aim for roughly 75% snow, 20% bike and 5% skate/BMX overall. It's a feel, not a rule.
+
+- **Snow clips** use `size` (S, M, L, XL), like park signage.
+- **Bike clips** use `trailRating`: `green`, `blue`, `black`, `double-black` or `pro`.
+- **Skate & BMX clips** just use feature tags (`bowl`, `street`, `mini-ramp`, `ledge`, `dirt-jumps`).
+
+### Seasons
+
+The homepage follows the Killington calendar: snow season (Dec–Apr), mud season (May), bike season (Jun–Sep) and stick season (Oct–Nov). In bike season the "Summer laps" band moves up and the hero switches to summer art. To override the date-based season, set `"season"` in `src/data/site.json` to `snow`, `mud`, `bike` or `stick`, and back to `auto` when you're done.
+
 ## The two safety fields
 
 Every video, photo and story has these:
@@ -27,9 +39,12 @@ title: "Opening Day Laps"
 date: 2026-11-20
 videoUrl: "https://www.youtube.com/watch?v=XXXXXXXXXXX"
 summary: "First laps of the season on the rail line."
-disciplines: [snowboard]          # ski, snowboard
-features: [rail, box]             # jump, rail, box, jib, pipe, street, natural, other
-size: S                           # S, M, L, XL — like park signage
+disciplines: [snowboard]          # ski, snowboard, mtb, skate, bmx
+features: [rail, box]             # snow: jump, rail, box, jib, pipe, natural
+                                  # bike: jump-line, drop, berms, tech, pump-track, wallride
+                                  # skate/bmx: bowl, street, mini-ramp, ledge, dirt-jumps
+size: S                           # snow only: S, M, L, XL — like park signage
+# trailRating: blue               # MTB only: green, blue, black, double-black, pro
 riders: [jane-doe]                # crew profile file names (optional)
 credits:                          # riders without profiles (optional)
   - name: Sam
@@ -76,7 +91,7 @@ rightsNote: "Alex sent via email 2026-11-20"
 
 ## Crew (rider profiles)
 
-`src/content/crew/jane-doe.md`. The file name (`jane-doe`) is how videos and photos refer to the rider in `riders: [...]`. A rider's page automatically lists every video and photo they're tagged in.
+`src/content/crew/jane-doe.md`. Add `alsoRides: "Summer: bike park laps"` for riders who ride year-round. The file name (`jane-doe`) is how videos and photos refer to the rider in `riders: [...]`. A rider's page automatically lists every video and photo they're tagged in.
 
 ## Sessions (events)
 
@@ -87,7 +102,7 @@ rightsNote: "Alex sent via email 2026-11-20"
 title: "Season Kickoff Film Night"
 start: 2026-12-10T19:00      # Vermont time; leave off the seconds
 end: 2026-12-10T21:00
-kind: film-night             # session, meetup, film-night, contest, clean-up, other
+kind: film-night             # session, meetup, film-night, contest, clean-up, group-ride, dig-day, skate-session, other
 location: "Venue name, Killington Rd"
 link: https://…              # optional, organiser's page
 organiser: Killington Shredders
@@ -109,4 +124,4 @@ Add `draft: true` to keep something off the live site. Drafts still show in `npm
 
 ## Park Dictionary
 
-Terms live in `src/data/glossary.json`. Add an object with `term`, `category` (Features, Tricks, Culture or Safety; new categories appear automatically) and `definition`.
+Terms live in `src/data/glossary.json`. Add an object with `term`, `category` (Snow features, Snow tricks, Culture, Safety, Bike or Skate & BMX; new categories appear automatically) and `definition`. Keep snow terms the clear majority.

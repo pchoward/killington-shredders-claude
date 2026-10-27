@@ -1,10 +1,11 @@
 {
   "name": "Killington Shredders",
-  "tagline": "Freestyle ski & snowboard culture from the Killington area.",
-  "description": "An independent media and community project for freestyle skiing, snowboarding and terrain-park culture around Killington, Vermont. Rider videos, photos, stories and local sessions.",
+  "tagline": "Snow first. Dirt when it melts.",
+  "description": "Killington Shredders is a freestyle ski and snowboard crew from Killington, Vermont, with mountain biking all summer. Rider edits, photos, stories and sessions from the local scene, and the public home of the Killington Shredders Facebook group.",
   "showDemoContent": true,
   "contactEmail": "",
   "social": {
+    "facebookGroup": "https://www.facebook.com/groups/1406458173440893",
     "instagram": "",
     "youtube": "",
     "tiktok": ""
@@ -12,5 +13,6 @@
   "submissions": {
     "open": false,
     "formEndpoint": ""
-  }
+  },
+  "season": "auto"
 }

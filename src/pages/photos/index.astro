@@ -5,13 +5,14 @@ import PhotoTile from '../../components/PhotoTile.astro';
 import Lightbox from '../../components/Lightbox.astro';
 import Filters from '../../components/Filters.astro';
 import { getPhotos } from '../../lib/content';
+import { disciplineChoices, seasonalOrder } from '../../lib/taxonomy';
 
-const photos = await getPhotos();
-const disciplines = [...new Set(photos.flatMap((p) => p.data.disciplines))].sort();
+const photos = seasonalOrder(await getPhotos());
+const disciplines = disciplineChoices(photos.map((p) => p.data.disciplines));
 ---
 
-<Base title="Photos" description="The photo wall: stills from the Killington-area freestyle scene, credited to the people who shot them.">
-  <PageHead kicker="Photos" title="Photo wall" intro="Stills from the park and beyond. Every shot is credited to the photographer who made it." />
+<Base title="Photos" description="The photo wall: stills of the Killington Shredders crew, credited to the people who shot them.">
+  <PageHead kicker="Photos" title="Photo wall" intro="Park laps, bike laps and everything in between. Every shot is credited to the photographer who made it." />
   <section class="section wrap">
     {
       photos.length ? (

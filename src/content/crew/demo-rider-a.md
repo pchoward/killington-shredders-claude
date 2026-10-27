@@ -3,6 +3,7 @@ name: Demo Rider A
 disciplines: [snowboard]
 stance: goofy
 favoriteFeature: Down-rails
+alsoRides: "Rainy days: skatepark"
 hometown: Placeholder, VT
 portrait: ../../assets/demo/rail-night.jpg
 portraitAlt: Placeholder illustration of an anonymous rider silhouette

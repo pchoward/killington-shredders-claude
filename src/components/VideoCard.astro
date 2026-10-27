@@ -3,7 +3,9 @@ import type { CollectionEntry } from 'astro:content';
 import Poster from './Poster.astro';
 import DemoBadge from './DemoBadge.astro';
 import SizeBadge from './SizeBadge.astro';
+import TrailRating from './TrailRating.astro';
 import { href, formatDate, labels } from '../lib/util';
+import { familyOf, filterTokens, primaryFamily } from '../lib/taxonomy';
 import { parseVideoUrl } from '../lib/embed';
 
 interface Props {
@@ -14,11 +16,12 @@ const { video, large = false } = Astro.props;
 const d = video.data;
 const embed = parseVideoUrl(d.videoUrl);
 const remote = embed?.provider === 'youtube' ? embed.thumb : undefined;
+const family = primaryFamily(d.disciplines);
 ---
 
 <article
-  class:list={['vcard', { large }]}
-  data-disciplines={d.disciplines.join(' ')}
+  class:list={['vcard', `fam-${family}`, { large }]}
+  data-disciplines={filterTokens(d.disciplines)}
   data-features={d.features.join(' ')}
 >
   <a href={href(`/videos/${video.id}/`)} class="link">
@@ -33,12 +36,13 @@ const remote = embed?.provider === 'youtube' ? embed.thumb : undefined;
       <div class="meta mono">
         <time datetime={d.date.toISOString()}>{formatDate(d.date)}</time>
         {d.size && <SizeBadge size={d.size} />}
+        {d.trailRating && <TrailRating rating={d.trailRating} />}
       </div>
       <h3>{d.title}</h3>
       {large && d.summary && <p class="muted">{d.summary}</p>}
       <div class="chips">
-        {d.disciplines.map((x) => <span class="chip">{labels[x]}</span>)}
-        {d.features.slice(0, 2).map((x) => <span class="chip">{labels[x]}</span>)}
+        {d.disciplines.map((x) => <span class={`chip chip--${familyOf[x]}`}>{labels[x]}</span>)}
+        {d.features.slice(0, 2).map((x) => <span class={`chip chip--${family}`}>{labels[x]}</span>)}
       </div>
     </div>
   </a>
@@ -57,6 +61,12 @@ const remote = embed?.provider === 'youtube' ? embed.thumb : undefined;
   .vcard:hover {
     transform: translateY(-3px);
     border-color: var(--orange);
+  }
+  .fam-bike:hover {
+    border-color: var(--moss);
+  }
+  .fam-cross:hover {
+    border-color: var(--concrete);
   }
   .link {
     display: block;

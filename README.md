@@ -1,6 +1,8 @@
 # Killington Shredders
 
-The website for **Killington Shredders**, an independent media and community project for freestyle skiing, snowboarding and terrain-park culture around Killington, Vermont. It's a home for rider videos, photos, stories, crew profiles, sessions, and a Park Dictionary for newer riders.
+The website for **Killington Shredders**, a freestyle ski and snowboard crew from Killington, Vermont, with mountain biking all summer and some skate & BMX crossover. It's the public home of the Killington Shredders Facebook group: rider videos, photos, stories, crew profiles, sessions, and a Park Dictionary for newer riders.
+
+*Snow first. Dirt when it melts.*
 
 > **Not affiliated with Killington Resort.** The site says so in the footer of every page, on the About page, and on the Sessions page.
 
@@ -12,6 +14,7 @@ More docs:
 
 | Doc | What's in it |
 | --- | --- |
+| [docs/V2-BRAND-REFRESH.md](docs/V2-BRAND-REFRESH.md) | What changed in v2 (75/20/5 emphasis, seasons, Facebook group) and how to compare with v1 |
 | [docs/CONTENT-GUIDE.md](docs/CONTENT-GUIDE.md) | Day-to-day: adding videos, photos, stories, riders, events; going live with real content |
 | [docs/RATIONALE.md](docs/RATIONALE.md) | Creative and technical decisions, and the trade-offs behind them |
 | [docs/NEXT-STEPS.md](docs/NEXT-STEPS.md) | A roadmap for growing into a rider-contributed media hub |
@@ -46,7 +49,7 @@ If a content file is missing something required (alt text on a photo, or a `righ
 1. Create a GitHub repository and push this folder to its `main` branch.
 2. In the repo, go to **Settings → Pages → Build and deployment → Source** and choose **GitHub Actions**.
 3. Push (or run the workflow manually from the **Actions** tab). `.github/workflows/deploy.yml` builds the site and publishes it.
-4. The site appears at `https://<you>.github.io/<repo>/`. The workflow sets the sub-path (`BASE_PATH`) automatically, so links, images and links inside Markdown all keep working.
+4. The site appears at `https://<you>.github.io/<repo>/`, with the original v1 at `/v1/` for comparison (see [V2-BRAND-REFRESH](docs/V2-BRAND-REFRESH.md)). The workflow sets the sub-path (`BASE_PATH`) automatically, so links, images and links inside Markdown all keep working.
 5. **Custom domain (optional, about $10–15/year for the domain; hosting stays free):** add it under Settings → Pages, then point a DNS `CNAME` record at `<you>.github.io`. HTTPS is automatic.
 
 ### Option B: Cloudflare Pages or Netlify
@@ -72,10 +75,10 @@ Full discussion: [docs/RATIONALE.md](docs/RATIONALE.md#hosting).
 
 ## Before launch: checklist
 
-1. Edit `src/data/site.json` (or use **Site settings** in Pages CMS): add the Instagram handle, contact email and other social links. Links and buttons stay hidden until they're filled in.
+1. Edit `src/data/site.json` (or use **Site settings** in Pages CMS): add the **Facebook group URL** (`social.facebookGroup`), which turns on the "Join the group" buttons, plus the Instagram handle, contact email and other links. Links and buttons stay hidden until they're filled in.
 2. Add some real content (see the [content guide](docs/CONTENT-GUIDE.md)).
 3. Set `"showDemoContent": false` to hide every demo item and the preview banner in one go. You can also delete the demo files: everything with `demo: true` in `src/content/`, plus `src/assets/demo/`.
-4. Review the two starter articles (`welcome-to-killington-shredders.md`, `park-etiquette-101.md`). They're written in the brand voice but use demo cover art; rewrite them in your own words and swap the covers.
+4. Review the three starter articles (`welcome-to-killington-shredders.md`, `park-etiquette-101.md`, `your-first-bike-park-day.md`). They're written in the brand voice but use demo cover art; rewrite them in your own words and swap the covers.
 5. Turn on submissions when you're ready (`submissions.open: true` plus an email address or a [Formspree](https://formspree.io) endpoint).
 
 ## Project layout

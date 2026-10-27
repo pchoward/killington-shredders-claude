@@ -4,6 +4,7 @@ import site from '../data/site.json';
 import { href, instagramUrl } from '../lib/util';
 
 const socials = [
+  { label: 'Facebook group', url: site.social.facebookGroup || undefined },
   { label: 'Instagram', url: instagramUrl(site.social.instagram) },
   { label: 'YouTube', url: site.social.youtube || undefined },
   { label: 'TikTok', url: site.social.tiktok || undefined },
@@ -47,10 +48,10 @@ const year = new Date().getFullYear();
     </div>
 
     <p class="disclaimer">
-      <strong>Independent project.</strong> Killington Shredders is a fan-run media and community brand. It is not
-      affiliated with, endorsed by, or sponsored by Killington Resort or any ski area operator. Trail and resort
-      names are used only to describe where riding happens. Ride within your ability, follow posted signage and
-      the Responsibility Code.
+      <strong>Independent community.</strong> Killington Shredders is a fan-run crew and Facebook group. It is not
+      affiliated with, endorsed by, or sponsored by Killington Resort, any ski area or bike park operator, or any
+      trail organisation. Place names are used only to describe where riding happens. Ride within your ability,
+      follow posted signage and trail closures, and stay off wet trails.
     </p>
     <p class="fine mono">
       © {year} Killington Shredders · Media belongs to the credited creators and is shown with their permission ·
@@ -84,6 +85,7 @@ const year = new Date().getFullYear();
   }
   .socials {
     display: flex;
+    flex-wrap: wrap;
     gap: 16px;
     font-weight: 600;
   }

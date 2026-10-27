@@ -28,9 +28,10 @@ videoUrl: "" # paste a YouTube / Vimeo / Instagram / TikTok link
 summary: ""
 # poster: ../../assets/media/your-image.jpg   # optional for YouTube (thumbnail is automatic)
 # posterAlt: ""
-disciplines: [snowboard] # ski, snowboard
-features: [rail] # jump, rail, box, jib, pipe, street, natural, other
-# size: M # S, M, L, XL
+disciplines: [snowboard] # ski, snowboard, mtb, skate, bmx
+features: [rail] # snow: jump, rail, box, jib, pipe, natural | bike: jump-line, drop, berms, tech, pump-track, wallride | skate/bmx: bowl, street, mini-ramp, ledge, dirt-jumps
+# size: M # snow park size: S, M, L, XL
+# trailRating: blue # MTB only: green, blue, black, double-black, pro
 riders: [] # crew profile file names, e.g. [jane-doe]
 credits: [] # riders without a profile, e.g. [{ name: "Sam", handle: "samrides" }]
 # filmer:
@@ -57,7 +58,7 @@ photographer:
   name: ""
   handle: ""
 riders: []
-disciplines: [snowboard]
+disciplines: [snowboard] # ski, snowboard, mtb, skate, bmx
 rights: # REQUIRED: own-work | creator-permission | creator-submitted | licensed
 rightsNote: ""
 ---
@@ -87,8 +88,9 @@ Write here. Markdown works: **bold**, [links](/videos/), lists, > quotes.
     body: `---
 name: "${title}"
 handle: "" # Instagram, without @
-disciplines: [snowboard]
+disciplines: [snowboard] # ski, snowboard, mtb, skate, bmx
 stance: regular # regular | goofy | n/a
+alsoRides: "" # e.g. "Summer: bike park laps"
 favoriteFeature: ""
 hometown: ""
 # portrait: ../../assets/media/CHANGE-ME.jpg
@@ -106,7 +108,7 @@ A short bio, ideally in the rider's own words.
 title: "${title}"
 start: ${today}T17:30 # Vermont time
 # end: ${today}T19:30
-kind: session # session | meetup | film-night | contest | clean-up | other
+kind: session # session | meetup | film-night | contest | clean-up | group-ride | dig-day | skate-session | other
 location: ""
 # link: https://...
 organiser: Killington Shredders

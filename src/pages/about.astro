@@ -5,6 +5,7 @@ import site from '../data/site.json';
 import { href, instagramUrl } from '../lib/util';
 
 const insta = instagramUrl(site.social.instagram);
+const group = site.social.facebookGroup;
 const email = site.contactEmail;
 ---
 
@@ -25,17 +26,22 @@ const email = site.contactEmail;
     <div class="prose">
       <h2 id="what">What this is</h2>
       <p>
-        Killington Shredders is an independent media and community project for freestyle skiing, snowboarding and
-        terrain-park culture in and around Killington, Vermont. We collect rider edits, photos and stories in one
-        place, so the best clips from the local scene don't disappear into a feed.
+        Killington Shredders is a freestyle ski and snowboard crew from Killington, Vermont, and a Facebook group of
+        the same name. Snow comes first. In summer a lot of us ride mountain bikes, and on rainy days you'll find some
+        of us at the skatepark.
+      </p>
+      <p>
+        The Facebook group is where we talk, plan sessions and share clips day to day. This site is the highlight
+        reel: the edits, photos and stories worth keeping, open to anyone, Facebook account or not. Every ability
+        level is welcome in both.
       </p>
 
       <h2 id="independent">Independence</h2>
       <p>
-        <strong>We are not affiliated with, endorsed by or sponsored by Killington Resort</strong> or any ski area
-        operator. "Killington" refers to the town and region where we ride. We don't speak for any mountain, and
-        nothing here is official resort information — for conditions, park status, tickets and rules, check the
-        resort's own channels.
+        <strong>We are not affiliated with, endorsed by or sponsored by Killington Resort</strong>, any ski area or
+        bike park operator, or any trail organisation. "Killington" refers to the town and region where we ride. We
+        don't speak for any mountain or trail network, and nothing here is official information. For conditions,
+        park and trail status, tickets and rules, check the operator's own channels.
       </p>
 
       <h2 id="credit">Credit & permission</h2>
@@ -45,7 +51,8 @@ const email = site.contactEmail;
         <li>Creators keep all rights to their work. Featuring it here doesn't transfer ownership.</li>
         <li>We record how permission was given for every piece (our publishing system won't build without it).</li>
         <li>We need a parent or guardian's OK before featuring anyone under 18.</li>
-        <li>We won't post riding on closed terrain or anything that encourages breaking mountain rules.</li>
+        <li>Posting in the Facebook group doesn't give us permission to republish. We always ask first.</li>
+        <li>We won't post riding on closed terrain or closed trails, wet-trail riding in mud season, or anything that encourages breaking mountain or trail rules.</li>
       </ul>
 
       <h2 id="demo-content">Demo content</h2>
@@ -61,7 +68,7 @@ const email = site.contactEmail;
       <p>
         If you appear in something on this site, or you created it, and you want it changed, re-credited or removed,
         just ask — no explanation needed. We aim to act within 48 hours. Tell us the page link and what you'd like
-        changed{email ? '' : ' via an Instagram DM'}.
+        changed{email ? '' : ' via a message in the Facebook group or on Instagram'}.
       </p>
 
       <h2 id="privacy">Privacy</h2>
@@ -72,11 +79,17 @@ const email = site.contactEmail;
       </p>
 
       <h2 id="contact">Contact</h2>
-      <p>
-        {email && <>Email <a href={`mailto:${email}`}>{email}</a>{insta ? ' or ' : '.'}</>}
-        {insta && <>message us on <a href={insta} target="_blank" rel="noopener">Instagram</a>.</>}
-        {!email && !insta && <>Contact details are coming soon.</>}
-      </p>
+      {
+        group || email || insta ? (
+          <ul>
+            {group && <li>The <a href={group} target="_blank" rel="noopener">Killington Shredders Facebook group</a> (the quickest way to reach us)</li>}
+            {email && <li>Email <a href={`mailto:${email}`}>{email}</a></li>}
+            {insta && <li>Message us on <a href={insta} target="_blank" rel="noopener">Instagram</a></li>}
+          </ul>
+        ) : (
+          <p>Find us in the Killington Shredders Facebook group. More contact details are coming soon.</p>
+        )
+      }
       <p><a href={href('/share/')}>Want to share a clip? Here's how →</a></p>
     </div>
   </div>

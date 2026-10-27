@@ -1,5 +1,19 @@
 # What was tested, and what wasn't
 
+## v2 (brand refresh), 2026-10-27
+
+| Area | Result |
+| --- | --- |
+| Build | 39 pages, no errors or warnings; `npm audit` 0 vulnerabilities |
+| Combined deploy (v2 at `/killington-shredders-claude/`, v1 at `…/v1/`) | Both built and served under their sub-paths: v2 80 URLs and v1 62 URLs crawled, 0 broken links, 0 JS errors, 0 axe-core violations |
+| Season logic | Pinned bike season: summer hero, no snowfall, "Summer laps" second. Pinned snow season: no bike band. Auto (October, stick season): band after photos |
+| Interactions (24 checks) | All v1 checks plus: MTB filter shows only bike edits and hides snow-only feature chips; Skate · BMX chip matches both; trail rating labels; homepage lead is always snow; discipline tabs; dictionary Bike category; crew "Off the snow" field. One v1 test needed updating, because v2 hides feature chips with no matches |
+| Responsive | Desktop and 390px mobile screenshots reviewed; no horizontal overflow |
+
+**Not verified for v2:** the GitHub Actions `/v1/` step has only been run locally (same commands, via a git worktree), not on GitHub. The Pages CMS field changes are untested in the live editor. The Facebook group link (added to site.json) was checked in the built pages, but not opened, because facebook.com is not reachable from the build container.
+
+## v1 (original build)
+
 Tested on 2026-10-27 in a Linux container with Node 24.22.1, Astro 7.4.2 and headless Chromium (Playwright).
 
 ## Verified ✅

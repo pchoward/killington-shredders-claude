@@ -27,15 +27,19 @@ content:
       - name: disciplines
         label: Discipline
         type: select
-        options: { multiple: true, values: [ski, snowboard] }
+        options: { multiple: true, values: [ski, snowboard, mtb, skate, bmx] }
       - name: features
         label: Feature types
         type: select
-        options: { multiple: true, values: [jump, rail, box, jib, pipe, street, natural, other] }
+        options: { multiple: true, values: [jump, rail, box, jib, pipe, natural, jump-line, drop, berms, tech, pump-track, wallride, bowl, street, mini-ramp, ledge, dirt-jumps, other] }
       - name: size
-        label: Feature size
+        label: Park feature size (snow only)
         type: select
         options: { values: [S, M, L, XL] }
+      - name: trailRating
+        label: Trail rating (MTB only)
+        type: select
+        options: { values: [green, blue, black, double-black, pro] }
       - name: riders
         label: Crew riders (profile file names, e.g. jane-doe)
         type: string
@@ -95,7 +99,7 @@ content:
       - name: disciplines
         label: Discipline
         type: select
-        options: { multiple: true, values: [ski, snowboard] }
+        options: { multiple: true, values: [ski, snowboard, mtb, skate, bmx] }
       - { name: featured, label: Use as home-page hero, type: boolean }
       - name: rights
         label: How do we have permission? (required)
@@ -148,12 +152,13 @@ content:
       - name: disciplines
         label: Rides
         type: select
-        options: { multiple: true, values: [ski, snowboard] }
+        options: { multiple: true, values: [ski, snowboard, mtb, skate, bmx] }
       - name: stance
         label: Stance
         type: select
         options: { values: [regular, goofy, n/a] }
       - { name: favoriteFeature, label: Go-to feature, type: string }
+      - { name: alsoRides, label: "Off the snow (e.g. Summer: bike park laps)", type: string }
       - { name: hometown, label: Home, type: string }
       - { name: portrait, label: Portrait, type: image }
       - { name: portraitAlt, label: Portrait description, type: string }
@@ -177,7 +182,7 @@ content:
       - name: kind
         label: Type
         type: select
-        options: { values: [session, meetup, film-night, contest, clean-up, other] }
+        options: { values: [session, meetup, film-night, contest, clean-up, group-ride, dig-day, skate-session, other] }
       - { name: location, label: Location, type: string, required: true }
       - { name: link, label: Details link, type: string }
       - { name: organiser, label: Organiser, type: string }
@@ -194,11 +199,16 @@ content:
       - { name: tagline, label: Tagline, type: string }
       - { name: description, label: Description (search engines), type: text }
       - { name: showDemoContent, label: Show demo/placeholder content, type: boolean }
+      - name: season
+        label: Homepage season (auto follows the calendar)
+        type: select
+        options: { values: [auto, snow, mud, bike, stick] }
       - { name: contactEmail, label: Contact email, type: string }
       - name: social
         label: Social links
         type: object
         fields:
+          - { name: facebookGroup, label: Facebook group URL, type: string }
           - { name: instagram, label: Instagram handle (no @), type: string }
           - { name: youtube, label: YouTube channel URL, type: string }
           - { name: tiktok, label: TikTok profile URL, type: string }
