@@ -13,15 +13,23 @@ const withContent = await Promise.all(events.map(async (e) => ({ e, Content: (aw
 const upcoming = withContent.filter(({ e }) => (e.data.end ?? e.data.start) >= now);
 const past = withContent.filter(({ e }) => (e.data.end ?? e.data.start) < now).reverse().slice(0, 6);
 const insta = instagramUrl(site.social.instagram);
+const group = site.social.facebookGroup;
 ---
 
-<Base title="Sessions" description="Meetups, film nights and community days for Killington-area freestyle riders.">
+<Base title="Sessions" description="Meetups, film nights, group rides and dig days for the Killington Shredders crew.">
   <PageHead
     kicker="Sessions"
     title="Sessions & meetups"
-    intro="Park meetups, film nights and community days. Plans change with the weather — final details always go out on Instagram first."
+    intro="Park meetups and film nights in winter, group rides and dig days in summer. Plans change with the weather, so final details always go out in the Facebook group first."
   >
-    {insta && <p><a href={insta} class="btn" target="_blank" rel="noopener">Get updates on Instagram ↗</a></p>}
+    {
+      (group || insta) && (
+        <p class="head-ctas">
+          {group && <a href={group} class="btn btn--hot" target="_blank" rel="noopener">Join the group for updates ↗</a>}
+          {insta && <a href={insta} class="btn" target="_blank" rel="noopener">Instagram ↗</a>}
+        </p>
+      )
+    }
   </PageHead>
 
   <section class="section wrap">
@@ -59,8 +67,9 @@ const insta = instagramUrl(site.social.instagram);
 
     <aside class="note">
       <strong>Good to know.</strong> Community sessions are informal get-togethers organised by riders. They aren't
-      run, sponsored or supervised by Killington Resort or any ski area — you'll need your own ticket or pass, and
-      everyone rides at their own risk and follows the mountain's posted rules.
+      run, sponsored or supervised by Killington Resort, any ski area or bike park, or any trail organisation. You'll
+      need your own ticket or pass, everyone rides at their own risk, and we follow posted rules and trail closures.
+      Dig days happen only with the trail owner's OK.
     </aside>
   </section>
 </Base>
@@ -68,6 +77,12 @@ const insta = instagramUrl(site.social.instagram);
 <style>
   .h {
     margin-bottom: 20px;
+  }
+  .head-ctas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 24px;
   }
   .past-h {
     margin-top: 56px;

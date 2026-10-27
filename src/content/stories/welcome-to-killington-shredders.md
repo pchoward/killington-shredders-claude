@@ -1,7 +1,7 @@
 ---
 title: "Welcome to Killington Shredders"
 date: 2026-10-27
-excerpt: "A home for the riders, edits, photos and sessions that make freestyle around Killington what it is. Here's what we're building and how to be part of it."
+excerpt: "The Facebook group is the clubhouse. This site is the highlight reel: the edits, photos, riders and sessions from Killington's freestyle crew, all year round."
 cover: ../../assets/demo/kicker-dawn.jpg
 coverAlt: Placeholder illustration of a snowboarder above a jump at sunrise
 author: Killington Shredders
@@ -12,25 +12,28 @@ rights: own-work
 rightsNote: Starter copy written for launch. The cover is demo artwork — swap in a real photo when you have one.
 ---
 
-Instagram is a great place to drop a clip. It's a terrible place to *find* one again three weeks later.
+Killington Shredders started as a Facebook group for people who ride the park in Killington, Vermont. Skiers and snowboarders, first-timers and lifers, the crew that does one more lap until the lifts stop.
 
-**Killington Shredders** is an independent home for freestyle skiing and snowboarding around Killington, Vermont: the edits, the photos, the people and the sessions. A place where a sick rail clip doesn't vanish after 24 hours, where you can watch a whole season of a crew's progression, and where newer riders can figure out where to start.
+This site is the group's highlight reel.
 
-## What you'll find here
+A Facebook group is great for planning a session or asking who's riding tomorrow. It's terrible at holding onto the best clip of the season three months later. So the edits, photos and stories that deserve to stick around end up here, credited to the people who made them, and open to anyone, Facebook account or not.
 
-- **Videos** — rider edits and session clips, tagged by discipline, feature type and size so you can find exactly the kind of riding you're into.
-- **Photos** — a wall of the best stills, with full credit to the people who shot them.
-- **Stories** — session reports, interviews, and how-tos.
-- **Crew** — profiles of local riders (only with their OK).
-- **Sessions** — meetups, film nights and community days.
-- **Park Dictionary** — because nobody should feel lost when someone says "switch back nine to boardslide."
+## Snow first, all year
+
+We're a **freestyle ski and snowboard crew** first. That's most of what you'll see here: park laps, rails, jumps, pipe and spring slush.
+
+When the snow melts, a lot of us don't stop riding; we swap to **bikes**. Summer brings jump lines, berms and bike park laps, so bike edits get their own spot on the site from June to September. On rainy days you'll find some of us at the skatepark, and the odd **skate or BMX** clip turns up too.
+
+## Every level is welcome
+
+First box slide or first double cork, first green flow trail or first drop: progression is progression. Some of our favourite clips are someone landing a thing for the first time.
 
 ## Credit, always
 
-Every clip and photo on this site belongs to the person who made it. We only post media we shot ourselves or have explicit permission to use, and every piece is credited. If you see your work here and want it changed or taken down, [tell us](/about/#takedown) and we'll sort it fast.
+Posting in the group doesn't mean we'll put your clip on the site. We ask first, every time, and every piece is credited. If you see your work here and want it changed or taken down, [tell us](/about/#takedown) and we'll sort it fast.
 
 ## Get involved
 
-Tag us on Instagram, send us your edit, or come to a session. Rider submissions will open properly once the site is up and running — check the [Share a clip](/share/) page for how it'll work.
+Join the Facebook group, post your clips there, and come to a session. Check the [Share a clip](/share/) page for how featuring works.
 
-*Killington Shredders is a fan-run project and isn't affiliated with Killington Resort.*
+*Killington Shredders is a fan-run community and isn't affiliated with Killington Resort or any trail organisation.*

@@ -61,6 +61,15 @@ const { target, disciplines, features = [] } = Astro.props;
         el.hidden = !show;
         if (show) shown++;
       }
+      // Only offer features that exist for the chosen discipline (no "Berms" chip when Ski is picked).
+      root.querySelectorAll<HTMLButtonElement>('button[data-key="f"][data-value]:not([data-value=""])').forEach((b) => {
+        const has = items.some(
+          (el) =>
+            (!state.d || el.dataset.disciplines!.split(' ').includes(state.d)) &&
+            (el.dataset.features ?? '').split(' ').includes(b.dataset.value!),
+        );
+        b.hidden = !has && state.f !== b.dataset.value;
+      });
       root.querySelectorAll<HTMLButtonElement>('button').forEach((b) => {
         b.setAttribute('aria-pressed', String(state[b.dataset.key!] === b.dataset.value));
       });
@@ -113,6 +122,9 @@ const { target, disciplines, features = [] } = Astro.props;
   }
   button:hover {
     border-color: var(--orange);
+  }
+  button[hidden] {
+    display: none;
   }
   button[aria-pressed='true'] {
     background: var(--orange);

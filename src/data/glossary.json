@@ -1,102 +1,102 @@
 [
   {
     "term": "Kicker",
-    "category": "Features",
+    "category": "Snow features",
     "definition": "A built snow jump with a takeoff ramp, a flat 'knuckle' section and a sloped landing."
   },
   {
     "term": "Knuckle",
-    "category": "Features",
+    "category": "Snow features",
     "definition": "The rounded edge where a jump's deck meets the landing. Landing on it (\"knuckling\") is short of the sweet spot and hard on the knees."
   },
   {
     "term": "Sweet spot",
-    "category": "Features",
+    "category": "Snow features",
     "definition": "The steepest part of a jump's landing, where the impact is softest."
   },
   {
     "term": "Rail",
-    "category": "Features",
+    "category": "Snow features",
     "definition": "A metal bar or pipe you slide across. Comes straight, kinked (with angle changes), down, flat-down or rainbow (arched)."
   },
   {
     "term": "Box",
-    "category": "Features",
+    "category": "Snow features",
     "definition": "A wider, flat-topped jib feature — usually the first thing new park riders learn to slide."
   },
   {
     "term": "Jib",
-    "category": "Features",
+    "category": "Snow features",
     "definition": "Riding on anything that isn't snow: rails, boxes, logs, tubes, walls. Also used as a verb."
   },
   {
     "term": "Halfpipe",
-    "category": "Features",
+    "category": "Snow features",
     "definition": "A U-shaped channel of snow with vertical walls on both sides. Riders go back and forth, airing out of each wall."
   },
   {
     "term": "Wallride",
-    "category": "Features",
+    "category": "Snow features",
     "definition": "A vertical or near-vertical surface that you ride across or tap."
   },
   {
     "term": "Butter",
-    "category": "Tricks",
+    "category": "Snow tricks",
     "definition": "Pressing onto the nose or tail of your board or skis on the snow to pivot or spin — style on flat ground."
   },
   {
     "term": "Ollie / Nollie",
-    "category": "Tricks",
+    "category": "Snow tricks",
     "definition": "Popping off the tail (ollie) or the nose (nollie) to get airborne without a jump."
   },
   {
     "term": "180, 360, 540…",
-    "category": "Tricks",
+    "category": "Snow tricks",
     "definition": "Spins, named by degrees rotated. A 360 is one full rotation; a 540 is one and a half."
   },
   {
     "term": "Frontside / Backside",
-    "category": "Tricks",
+    "category": "Snow tricks",
     "definition": "Spin or approach direction. Frontside means your chest faces the direction of travel (or the feature) first; backside means your back does."
   },
   {
     "term": "Switch",
-    "category": "Tricks",
+    "category": "Snow tricks",
     "definition": "Riding or taking off with your non-natural stance — backwards for skiers, opposite foot forward for snowboarders."
   },
   {
     "term": "Grab",
-    "category": "Tricks",
+    "category": "Snow tricks",
     "definition": "Holding your board or skis in the air. Mute, indy, method, melon, japan, safety and tail are all grabs."
   },
   {
     "term": "Method",
-    "category": "Tricks",
+    "category": "Snow tricks",
     "definition": "A classic snowboard grab: front hand on the heel edge, knees bent and the board pulled up and back behind you. Arguably the most stylish grab there is."
   },
   {
     "term": "Cork",
-    "category": "Tricks",
+    "category": "Snow tricks",
     "definition": "An off-axis spin where the rider's body tilts sideways, so the head drops below the feet partway through."
   },
   {
     "term": "Rodeo / Misty",
-    "category": "Tricks",
+    "category": "Snow tricks",
     "definition": "Off-axis inverted spins — rodeos flip backward, misties flip forward."
   },
   {
     "term": "Boardslide / Lipslide",
-    "category": "Tricks",
+    "category": "Snow tricks",
     "definition": "Snowboard rail slides with the board across the rail. On a boardslide the nose crosses over the rail first; on a lipslide the tail goes over first."
   },
   {
     "term": "50-50",
-    "category": "Tricks",
+    "category": "Snow tricks",
     "definition": "Sliding straight down a rail or box with your board or skis parallel to it."
   },
   {
     "term": "Press",
-    "category": "Tricks",
+    "category": "Snow tricks",
     "definition": "Shifting weight to the nose or tail while sliding a rail or box so the other end lifts up."
   },
   {
@@ -138,5 +138,65 @@
     "term": "Respect gets respect",
     "category": "Safety",
     "definition": "One of the four points of the ski industry's 'Park Smart' messaging: make a plan, look before you leap, easy style it, and respect gets respect."
+  },
+  {
+    "term": "Berm",
+    "category": "Bike",
+    "definition": "A banked turn on a bike trail. Lean the bike into it, look through the exit and carry your speed out."
+  },
+  {
+    "term": "Flow trail",
+    "category": "Bike",
+    "definition": "A machine-built trail of berms, rollers and small jumps designed to be ridden smoothly with little braking. The best place to start."
+  },
+  {
+    "term": "Table / tabletop",
+    "category": "Bike",
+    "definition": "A jump with a flat top between takeoff and landing, so coming up short means rolling across the deck instead of casing a gap. Also a trick: laying the bike flat in the air."
+  },
+  {
+    "term": "Whip",
+    "category": "Bike",
+    "definition": "Kicking the back of the bike sideways in the air, then bringing it straight before landing. Steeze, bike edition."
+  },
+  {
+    "term": "Manual",
+    "category": "Bike",
+    "definition": "Riding on the back wheel without pedalling, balanced by shifting your weight back. The bike version of a tail press."
+  },
+  {
+    "term": "Drop",
+    "category": "Bike",
+    "definition": "A ledge or wooden deck you ride off into a landing below. Speed matters: too slow and the front wheel dives."
+  },
+  {
+    "term": "Pump track",
+    "category": "Bike",
+    "definition": "A loop of rollers and berms you ride without pedalling, gaining speed by pumping the bike through the terrain."
+  },
+  {
+    "term": "Roost",
+    "category": "Bike",
+    "definition": "The spray of dirt thrown up when a rider rails a corner. The dirt equivalent of a powder slash."
+  },
+  {
+    "term": "Dig day",
+    "category": "Bike",
+    "definition": "A volunteer trail-building or maintenance day. Riders who help build and fix trails are the reason there are trails."
+  },
+  {
+    "term": "Drop in",
+    "category": "Skate & BMX",
+    "definition": "Starting a run by riding over the coping into a ramp or bowl. The scariest one-second commitment there is, until you've done it."
+  },
+  {
+    "term": "Coping",
+    "category": "Skate & BMX",
+    "definition": "The metal pipe or concrete edge along the top of a ramp or bowl, used for grinds and stalls."
+  },
+  {
+    "term": "Bunny hop",
+    "category": "Skate & BMX",
+    "definition": "Lifting both wheels off the ground at once on a bike, front first then back. The ollie of BMX and MTB."
   }
 ]

@@ -18,6 +18,11 @@
   --orange-ink: #1a0a03;
   --ice: #8fd3ff;
   --snow: #ffffff;
+  /* Secondary families: moss for bikes (summer), concrete for skate & BMX. */
+  --moss: #8fb873;
+  --moss-ink: #0e1a08;
+  --concrete: #b9c1c9;
+  --sky: #2f80d8;
   --ok: #4ade80;
 
   --font-display: 'Anton', 'Impact', 'Arial Narrow', sans-serif;
@@ -209,6 +214,16 @@ p {
   letter-spacing: 0.06em;
   text-transform: uppercase;
   white-space: nowrap;
+}
+
+/* Family accents on chips: snow stays neutral (it's the default), bikes moss, skate/BMX concrete. */
+.chip--bike {
+  color: var(--moss);
+  border-color: color-mix(in srgb, var(--moss) 45%, transparent);
+}
+.chip--cross {
+  color: var(--concrete);
+  border-color: color-mix(in srgb, var(--concrete) 45%, transparent);
 }
 
 /* ---------- Grids ---------- */

@@ -33,6 +33,20 @@ jobs:
           # e.g. https://<user>.github.io and /<repo> — or your custom domain and "/".
           SITE_URL: ${{ steps.pages.outputs.origin }}
           BASE_PATH: ${{ steps.pages.outputs.base_path || '/' }}
+      # Keep the original (snow-only) version live at /v1/ for comparison.
+      # Delete this step once you no longer need it.
+      - name: Build v1-original at /v1/
+        run: |
+          if git fetch --depth 1 origin v1-original; then
+            git worktree add ../v1 FETCH_HEAD
+            cd ../v1 && npm ci && npm run build
+            mkdir -p "$GITHUB_WORKSPACE/dist/v1" && cp -r dist/. "$GITHUB_WORKSPACE/dist/v1/"
+          else
+            echo "No v1-original branch; skipping."
+          fi
+        env:
+          SITE_URL: ${{ steps.pages.outputs.origin }}
+          BASE_PATH: ${{ steps.pages.outputs.base_path }}/v1
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist

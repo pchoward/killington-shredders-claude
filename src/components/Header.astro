@@ -1,6 +1,9 @@
 ---
 import Logo from './Logo.astro';
 import { href } from '../lib/util';
+import site from '../data/site.json';
+
+const group = site.social.facebookGroup;
 
 const nav = [
   { label: 'Videos', path: '/videos/' },
@@ -37,7 +40,13 @@ const isActive = (path: string) => current.startsWith(path);
           ))
         }
       </ul>
-      <a href={href('/share/')} class="btn btn--hot share">Share a clip</a>
+      {
+        group ? (
+          <a href={group} class="btn btn--hot share" target="_blank" rel="noopener">Join the group</a>
+        ) : (
+          <a href={href('/share/')} class="btn btn--hot share">Share a clip</a>
+        )
+      }
     </nav>
   </div>
 </header>

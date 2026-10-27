@@ -16,9 +16,20 @@ import { z } from 'astro/zod';
  *           missing, so nothing goes live without a recorded permission.
  */
 
-const disciplines = z.enum(['ski', 'snowboard']);
-const featureTypes = z.enum(['jump', 'rail', 'box', 'jib', 'pipe', 'street', 'natural', 'other']);
-const parkSize = z.enum(['S', 'M', 'L', 'XL']);
+// Snow is the identity; bikes are summer; skate & BMX are crossover.
+// See src/lib/taxonomy.ts for families, labels and which features belong where.
+const disciplines = z.enum(['ski', 'snowboard', 'mtb', 'skate', 'bmx']);
+const featureTypes = z.enum([
+  // snow
+  'jump', 'rail', 'box', 'jib', 'pipe', 'natural',
+  // bike
+  'jump-line', 'drop', 'berms', 'tech', 'pump-track', 'wallride',
+  // skate & bmx
+  'bowl', 'street', 'mini-ramp', 'ledge', 'dirt-jumps',
+  'other',
+]);
+const parkSize = z.enum(['S', 'M', 'L', 'XL']); // terrain-park signage, snow only
+const trailRating = z.enum(['green', 'blue', 'black', 'double-black', 'pro']); // MTB trail difficulty
 
 const rights = z.enum([
   'own-work', // shot/filmed by Killington Shredders
@@ -66,6 +77,7 @@ const videos = defineCollection({
         disciplines: z.array(disciplines).default([]),
         features: z.array(featureTypes).default([]),
         size: parkSize.optional(),
+        trailRating: trailRating.optional(),
         riders: z.array(reference('crew')).default([]),
         credits: z.array(credit).default([]), // riders/filmers who aren't crew profiles
         filmer: credit.optional(),
@@ -128,6 +140,7 @@ const crew = defineCollection({
         handle: z.string().optional(),
         disciplines: z.array(disciplines).default([]),
         stance: z.enum(['regular', 'goofy', 'n/a']).optional(),
+        alsoRides: z.string().optional(), // e.g. "Summer: bike park laps"
         favoriteFeature: z.string().optional(),
         hometown: z.string().optional(),
         portrait: image().optional(),
@@ -181,7 +194,9 @@ const events = defineCollection({
     start: localDate,
     end: localDate.optional(),
     allDay: z.boolean().default(false),
-    kind: z.enum(['session', 'meetup', 'film-night', 'contest', 'clean-up', 'other']).default('session'),
+    kind: z
+      .enum(['session', 'meetup', 'film-night', 'contest', 'clean-up', 'group-ride', 'dig-day', 'skate-session', 'other'])
+      .default('session'),
     location: z.string(),
     // Where details/tickets live (organiser's page). Never link to a page
     // implying the event is run by the resort unless it actually is.

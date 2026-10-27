@@ -6,6 +6,8 @@ import VideoPlayer from '../../components/VideoPlayer.astro';
 import VideoCard from '../../components/VideoCard.astro';
 import DemoBadge from '../../components/DemoBadge.astro';
 import SizeBadge from '../../components/SizeBadge.astro';
+import TrailRating from '../../components/TrailRating.astro';
+import { familyOf, primaryFamily } from '../../lib/taxonomy';
 import People from '../../components/People.astro';
 import Prose from '../../components/Prose.astro';
 import { getVideos, resolvePeople } from '../../lib/content';
@@ -45,8 +47,9 @@ const og = d.poster ? (await getImage({ src: d.poster, width: 1200, format: 'png
         <div class="tags">
           {d.demo && <DemoBadge />}
           {d.size && <SizeBadge size={d.size} />}
-          {d.disciplines.map((x) => <span class="chip">{labels[x]}</span>)}
-          {d.features.map((x) => <span class="chip">{labels[x]}</span>)}
+          {d.trailRating && <TrailRating rating={d.trailRating} long />}
+          {d.disciplines.map((x) => <span class={`chip chip--${familyOf[x]}`}>{labels[x]}</span>)}
+          {d.features.map((x) => <span class={`chip chip--${primaryFamily(d.disciplines)}`}>{labels[x]}</span>)}
         </div>
         <h1>{d.title}</h1>
         {d.summary && <p class="summary">{d.summary}</p>}

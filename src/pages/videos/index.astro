@@ -4,19 +4,18 @@ import PageHead from '../../components/PageHead.astro';
 import VideoCard from '../../components/VideoCard.astro';
 import Filters from '../../components/Filters.astro';
 import { getVideos } from '../../lib/content';
+import { disciplineChoices, featureChoices, seasonalOrder } from '../../lib/taxonomy';
 
-const videos = await getVideos();
-const uniq = (xs: string[]) => [...new Set(xs)];
-const disciplines = uniq(videos.flatMap((v) => v.data.disciplines)).sort();
-const order = ['jump', 'rail', 'box', 'jib', 'pipe', 'street', 'natural', 'other'];
-const features = uniq(videos.flatMap((v) => v.data.features)).sort((a, b) => order.indexOf(a) - order.indexOf(b));
+const videos = seasonalOrder(await getVideos());
+const disciplines = disciplineChoices(videos.map((v) => v.data.disciplines));
+const features = featureChoices(videos.map((v) => v.data.features));
 ---
 
-<Base title="Videos" description="Rider edits and session clips from the Killington-area freestyle scene.">
+<Base title="Videos" description="Rider edits and session clips from Killington: park laps all winter, bike laps all summer.">
   <PageHead
     kicker="Videos"
     title="The edits"
-    intro="Rider edits, session clips and park laps. Filter by how you ride and what you like to hit."
+    intro="Park laps all winter, bike laps all summer, and the odd skatepark session in between. Filter by how you ride and what you like to hit."
   />
   <section class="section wrap">
     {
