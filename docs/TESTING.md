@@ -10,7 +10,7 @@
 | Interactions (24 checks) | All v1 checks plus: MTB filter shows only bike edits and hides snow-only feature chips; Skate · BMX chip matches both; trail rating labels; homepage lead is always snow; discipline tabs; dictionary Bike category; crew "Off the snow" field. One v1 test needed updating, because v2 hides feature chips with no matches |
 | Responsive | Desktop and 390px mobile screenshots reviewed; no horizontal overflow |
 
-**Not verified for v2:** the GitHub Actions `/v1/` step has only been run locally (same commands, via a git worktree), not on GitHub. The Pages CMS field changes are untested in the live editor. The Facebook group link can't be tested until the URL is added.
+**Not verified for v2:** the GitHub Actions `/v1/` step has only been run locally (same commands, via a git worktree), not on GitHub. The Pages CMS field changes are untested in the live editor. The Facebook group link (added to site.json) was checked in the built pages, but not opened, because facebook.com is not reachable from the build container.
 
 ## v1 (original build)
 
